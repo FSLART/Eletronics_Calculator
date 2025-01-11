@@ -7,6 +7,7 @@ from tabs.capacitor_tab import create_capacitor_tab
 from tabs.capacitor_charge_discharge import create_charge_discharge_tab
 from tabs.phase_angle_tab import create_phase_angle_tab
 from tabs.cap_energy_tab import create_cap_energy_tab
+from tabs.inductor_charge_discharge import create_charge_discharge_tab_Ind
 
 # Main application window
 root = tk.Tk()
@@ -20,6 +21,7 @@ notebook.pack(expand=True, fill="both")
 create_ohms_tab(notebook)
 create_power_tab(notebook)
 create_inductor_tab(notebook)
+create_charge_discharge_tab_Ind(notebook)
 create_capacitor_tab(notebook)
 create_charge_discharge_tab(notebook)
 create_phase_angle_tab(notebook)
