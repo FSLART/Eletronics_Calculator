@@ -5,6 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def highlight_point(ax, time, voltage):
+    ax.plot(time, voltage, "ro")  # Highlight the point in red
+    plt.draw()
+
+
 def calculate_discharge():
     try:
         initial_voltage = float(entry_initial_voltage.get())
@@ -39,12 +44,37 @@ def calculate_discharge():
         def on_click(event):
             if event.inaxes is not None:
                 x, y = event.xdata, event.ydata
-                print(f"Selected point: Time = {x:.2f} s, Voltage = {y:.2f} V")
+                print(f"Selected point: Time = {x:.5f} s, Voltage = {y:.5f} V")
                 messagebox.showinfo(
-                    "Selected Point", f"Time = {x:.2f} s\nVoltage = {y:.2f} V"
+                    "Selected Point", f"Time = {x:.5f} s\nVoltage = {y:.5f} V"
                 )
 
         fig.canvas.mpl_connect("button_press_event", on_click)
+
+        # Highlight user-specified point
+        try:
+            desired_time = entry_desired_time.get()
+            desired_voltage = entry_desired_voltage.get()
+            if desired_time:
+                desired_time = float(desired_time)
+                desired_voltage = final_voltage + (
+                    initial_voltage - final_voltage
+                ) * np.exp(-desired_time / time_constant)
+                highlight_point(ax, desired_time, desired_voltage)
+                entry_desired_voltage.delete(0, tk.END)
+                entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
+            elif desired_voltage:
+                desired_voltage = float(desired_voltage)
+                desired_time = -time_constant * np.log(
+                    (desired_voltage - final_voltage)
+                    / (initial_voltage - final_voltage)
+                )
+                highlight_point(ax, desired_time, desired_voltage)
+                entry_desired_time.delete(0, tk.END)
+                entry_desired_time.insert(0, f"{desired_time:.5f}")
+        except ValueError:
+            pass  # Ignore if no valid input
+
         plt.show()
 
     except ValueError:
@@ -85,12 +115,37 @@ def calculate_charge():
         def on_click(event):
             if event.inaxes is not None:
                 x, y = event.xdata, event.ydata
-                print(f"Selected point: Time = {x:.2f} s, Voltage = {y:.2f} V")
+                print(f"Selected point: Time = {x:.5f} s, Voltage = {y:.5f} V")
                 messagebox.showinfo(
-                    "Selected Point", f"Time = {x:.2f} s\nVoltage = {y:.2f} V"
+                    "Selected Point", f"Time = {x:.5f} s\nVoltage = {y:.5f} V"
                 )
 
         fig.canvas.mpl_connect("button_press_event", on_click)
+
+        # Highlight user-specified point
+        try:
+            desired_time = entry_desired_time.get()
+            desired_voltage = entry_desired_voltage.get()
+            if desired_time:
+                desired_time = float(desired_time)
+                desired_voltage = initial_voltage + (
+                    final_voltage - initial_voltage
+                ) * (1 - np.exp(-desired_time / time_constant))
+                highlight_point(ax, desired_time, desired_voltage)
+                entry_desired_voltage.delete(0, tk.END)
+                entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
+            elif desired_voltage:
+                desired_voltage = float(desired_voltage)
+                desired_time = -time_constant * np.log(
+                    (initial_voltage - desired_voltage)
+                    / (initial_voltage - final_voltage)
+                )
+                highlight_point(ax, desired_time, desired_voltage)
+                entry_desired_time.delete(0, tk.END)
+                entry_desired_time.insert(0, f"{desired_time:.5f}")
+        except ValueError:
+            pass  # Ignore if no valid input
+
         plt.show()
 
     except ValueError:
@@ -102,6 +157,8 @@ def clear_fields():
     entry_final_voltage.delete(0, tk.END)
     entry_resistance.delete(0, tk.END)
     entry_capacitance.delete(0, tk.END)
+    entry_desired_time.delete(0, tk.END)
+    entry_desired_voltage.delete(0, tk.END)
 
 
 def create_charge_discharge_tab(notebook):
@@ -137,6 +194,20 @@ def create_charge_discharge_tab(notebook):
     entry_capacitance = tk.Entry(frame_capacitor)
     entry_capacitance.grid(row=3, column=1, padx=10, pady=5)
 
+    tk.Label(frame_capacitor, text="Desired Time (s):").grid(
+        row=4, column=0, padx=10, pady=5
+    )
+    global entry_desired_time
+    entry_desired_time = tk.Entry(frame_capacitor)
+    entry_desired_time.grid(row=4, column=1, padx=10, pady=5)
+
+    tk.Label(frame_capacitor, text="Desired Voltage (V):").grid(
+        row=5, column=0, padx=10, pady=5
+    )
+    global entry_desired_voltage
+    entry_desired_voltage = tk.Entry(frame_capacitor)
+    entry_desired_voltage.grid(row=5, column=1, padx=10, pady=5)
+
     # Buttons for calculation and clear
     btn_calculate_discharge = tk.Button(
         frame_capacitor,
@@ -145,7 +216,7 @@ def create_charge_discharge_tab(notebook):
         bg="green",
         fg="white",
     )
-    btn_calculate_discharge.grid(row=4, column=0, padx=10, pady=10)
+    btn_calculate_discharge.grid(row=6, column=0, padx=10, pady=10)
 
     btn_calculate_charge = tk.Button(
         frame_capacitor,
@@ -154,7 +225,7 @@ def create_charge_discharge_tab(notebook):
         bg="blue",
         fg="white",
     )
-    btn_calculate_charge.grid(row=4, column=1, padx=10, pady=10)
+    btn_calculate_charge.grid(row=6, column=1, padx=10, pady=10)
 
     btn_clear = tk.Button(frame_capacitor, text="Clear", command=clear_fields)
-    btn_clear.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+    btn_clear.grid(row=7, column=0, columnspan=2, padx=10, pady=10)
