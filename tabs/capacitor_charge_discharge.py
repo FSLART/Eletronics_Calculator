@@ -10,12 +10,47 @@ def highlight_point(ax, time, voltage):
     plt.draw()
 
 
+def convert_with_units(value_str, unit):
+    base_value = float(value_str)
+    match unit:
+        case "pΩ":
+            return base_value * 1e-12
+        case "nΩ":
+            return base_value * 1e-9
+        case "µΩ":
+            return base_value * 1e-6
+        case "mΩ":
+            return base_value * 1e-3
+        case "kΩ":
+            return base_value * 1e3
+        case "MΩ":
+            return base_value * 1e6
+        case "GΩ":
+            return base_value * 1e9
+        case "kF":
+            return base_value * 1e3
+        case "mF":
+            return base_value * 1e-3
+        case "µF":
+            return base_value * 1e-6
+        case "nF":
+            return base_value * 1e-9
+        case "pF":
+            return base_value * 1e-12
+        case _:
+            return base_value
+
+
 def calculate_discharge():
     try:
         initial_voltage = float(entry_initial_voltage.get())
         final_voltage = float(entry_final_voltage.get())
-        resistance = float(entry_resistance.get())
-        capacitance = float(entry_capacitance.get())
+        resistance = convert_with_units(
+            entry_resistance.get(), combo_resistance_unit.get()
+        )
+        capacitance = convert_with_units(
+            entry_capacitance.get(), combo_capacitance_unit.get()
+        )
 
         if (
             initial_voltage <= 0
@@ -85,8 +120,12 @@ def calculate_charge():
     try:
         initial_voltage = float(entry_initial_voltage.get())
         final_voltage = float(entry_final_voltage.get())
-        resistance = float(entry_resistance.get())
-        capacitance = float(entry_capacitance.get())
+        resistance = convert_with_units(
+            entry_resistance.get(), combo_resistance_unit.get()
+        )
+        capacitance = convert_with_units(
+            entry_capacitance.get(), combo_capacitance_unit.get()
+        )
 
         if (
             initial_voltage < 0
@@ -187,12 +226,26 @@ def create_charge_discharge_tab(notebook):
     entry_resistance = tk.Entry(frame_capacitor)
     entry_resistance.grid(row=2, column=1, padx=10, pady=5)
 
+    global combo_resistance_unit
+    combo_resistance_unit = ttk.Combobox(
+        frame_capacitor, values=["mΩ", "mΩ", "Ω", "kΩ", "MΩ", "GΩ"], width=5
+    )
+    combo_resistance_unit.current(0)
+    combo_resistance_unit.grid(row=2, column=2, padx=5, pady=5)
+
     tk.Label(frame_capacitor, text="Capacitance (F):", fg="red").grid(
         row=3, column=0, padx=10, pady=5
     )
     global entry_capacitance
     entry_capacitance = tk.Entry(frame_capacitor)
     entry_capacitance.grid(row=3, column=1, padx=10, pady=5)
+
+    global combo_capacitance_unit
+    combo_capacitance_unit = ttk.Combobox(
+        frame_capacitor, values=["kF", "F", "mF", "µF", "nF"], width=5
+    )
+    combo_capacitance_unit.current(0)
+    combo_capacitance_unit.grid(row=3, column=2, padx=5, pady=5)
 
     tk.Label(frame_capacitor, text="Desired Time (s):").grid(
         row=4, column=0, padx=10, pady=5
