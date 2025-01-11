@@ -166,28 +166,28 @@ def create_charge_discharge_tab(notebook):
     notebook.add(frame_capacitor, text="Capacitor Charge/Discharge")
 
     # Input fields
-    tk.Label(frame_capacitor, text="Initial Voltage (V):").grid(
+    tk.Label(frame_capacitor, text="Initial Voltage (V):", fg="red").grid(
         row=0, column=0, padx=10, pady=5
     )
     global entry_initial_voltage
     entry_initial_voltage = tk.Entry(frame_capacitor)
     entry_initial_voltage.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(frame_capacitor, text="Final Voltage (V):").grid(
+    tk.Label(frame_capacitor, text="Final Voltage (V):", fg="red").grid(
         row=1, column=0, padx=10, pady=5
     )
     global entry_final_voltage
     entry_final_voltage = tk.Entry(frame_capacitor)
     entry_final_voltage.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(frame_capacitor, text="Resistance (Ω):").grid(
+    tk.Label(frame_capacitor, text="Resistance (Ω):", fg="red").grid(
         row=2, column=0, padx=10, pady=5
     )
     global entry_resistance
     entry_resistance = tk.Entry(frame_capacitor)
     entry_resistance.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Label(frame_capacitor, text="Capacitance (F):").grid(
+    tk.Label(frame_capacitor, text="Capacitance (F):", fg="red").grid(
         row=3, column=0, padx=10, pady=5
     )
     global entry_capacitance
@@ -229,3 +229,8 @@ def create_charge_discharge_tab(notebook):
 
     btn_clear = tk.Button(frame_capacitor, text="Clear", command=clear_fields)
     btn_clear.grid(row=7, column=0, columnspan=2, padx=10, pady=10)
+
+    # Explanation label
+    explanation_text = "CAMPOS A VERMELHO SAO OBRIGATORIOS!! \nPrencher Tempo para obter Tensão,\nou preencher tensão para obter tempo!\n"
+    lbl_explanation = tk.Label(frame_capacitor, text=explanation_text, justify=tk.LEFT)
+    lbl_explanation.grid(row=0, column=2, rowspan=8, padx=10, pady=5, sticky="nw")
