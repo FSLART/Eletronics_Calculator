@@ -108,10 +108,8 @@ def calculate_discharge():
                         initial_voltage - final_voltage
                     ) * np.exp(-desired_time / time_constant)
                     highlight_point(ax, desired_time, desired_voltage)
-                    entry_desired_voltage.configure(state="normal")
                     entry_desired_voltage.delete(0, tk.END)
                     entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
-                    entry_desired_voltage.configure(state="readonly")
             elif combo_calc_mode.get() == "Time for Given Voltage":
                 # The user wants to calculate time for a specified voltage
                 if desired_voltage:
@@ -121,10 +119,8 @@ def calculate_discharge():
                         / (initial_voltage - final_voltage)
                     )
                     highlight_point(ax, desired_time, desired_voltage)
-                    entry_desired_time.configure(state="normal")
                     entry_desired_time.delete(0, tk.END)
                     entry_desired_time.insert(0, f"{desired_time:.5f}")
-                    entry_desired_time.configure(state="readonly")
         except ValueError:
             pass  # Ignore if no valid input
 
@@ -191,10 +187,8 @@ def calculate_charge():
                         final_voltage - initial_voltage
                     ) * (1 - np.exp(-desired_time / time_constant))
                     highlight_point(ax, desired_time, desired_voltage)
-                    entry_desired_voltage.configure(state="normal")
                     entry_desired_voltage.delete(0, tk.END)
                     entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
-                    entry_desired_voltage.configure(state="readonly")
             elif combo_calc_mode.get() == "Time for Given Voltage":
                 # The user wants to calculate time for a specified voltage
                 if desired_voltage:
@@ -204,10 +198,8 @@ def calculate_charge():
                         / (initial_voltage - final_voltage)
                     )
                     highlight_point(ax, desired_time, desired_voltage)
-                    entry_desired_time.configure(state="normal")
                     entry_desired_time.delete(0, tk.END)
                     entry_desired_time.insert(0, f"{desired_time:.5f}")
-                    entry_desired_time.configure(state="readonly")
         except ValueError:
             pass  # Ignore if no valid input
 
@@ -257,7 +249,7 @@ def create_charge_discharge_tab(notebook):
         frame_capacitor, values=["mΩ", "mΩ", "Ω", "kΩ", "MΩ", "GΩ"], width=5
     )
     combo_resistance_unit.current(0)
-    combo_resistance_unit.grid(row=2, column=2, padx=5, pady=5)
+    combo_resistance_unit.grid(row=2, column=2, padx=0, pady=0)
 
     tk.Label(frame_capacitor, text="Capacitance (F):", fg="red").grid(
         row=3, column=0, padx=10, pady=5
@@ -271,7 +263,7 @@ def create_charge_discharge_tab(notebook):
         frame_capacitor, values=["kF", "F", "mF", "µF", "nF", "pF"], width=5
     )
     combo_capacitance_unit.current(0)
-    combo_capacitance_unit.grid(row=3, column=2, padx=5, pady=5)
+    combo_capacitance_unit.grid(row=3, column=2, padx=0, pady=0)
 
     tk.Label(frame_capacitor, text="Desired Time (s):").grid(
         row=4, column=0, padx=10, pady=5
