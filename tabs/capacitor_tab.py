@@ -123,32 +123,78 @@ def update_fields(event):
 
 def plot_graph_capacitor():
     try:
-        voltage = float(entry_voltage.get())
-        capacitance = float(entry_capacitance.get())
-        resistance = (
-            float(entry_impedance.get().split("+")[0])
-            if "+" in entry_impedance.get()
-            else None
-        )
+        selected_equation = combo_equation.get()
 
-        if resistance is None or not voltage or not capacitance:
-            raise ValueError("Missing required input for plotting.")
+        if selected_equation == "C = 1 / (2πfZ)":
+            # For capacitance equation, plot impedance vs frequency
+            frequency_range = np.linspace(1, 1000, 500)  # Frequency range from 1 Hz to 1000 Hz
+            impedance_values = 1 / (2 * np.pi * frequency_range * float(entry_capacitance.get()))
+            plt.figure(figsize=(8, 5))
+            plt.plot(frequency_range, impedance_values, label="Impedance vs Frequency")
+            plt.title("Impedance vs Frequency")
+            plt.xlabel("Frequency (Hz)")
+            plt.ylabel("Impedance (Ω)")
+            plt.grid(True)
+            plt.legend()
+            plt.show()
 
-        time = np.linspace(0, 5 * capacitance * resistance, 500)
-        current = voltage / resistance * np.exp(-time / (resistance * capacitance))
+        elif selected_equation == "Z = 1 / (2πfC)":
+            # For impedance equation, plot impedance vs frequency
+            frequency_range = np.linspace(1, 1000, 500)  # Frequency range from 1 Hz to 1000 Hz
+            capacitance = float(entry_capacitance.get())
+            impedance_values = 1 / (2 * np.pi * frequency_range * capacitance)
+            plt.figure(figsize=(8, 5))
+            plt.plot(frequency_range, impedance_values, label="Impedance vs Frequency")
+            plt.title("Impedance vs Frequency")
+            plt.xlabel("Frequency (Hz)")
+            plt.ylabel("Impedance (Ω)")
+            plt.grid(True)
+            plt.legend()
+            plt.show()
 
-        plt.figure(figsize=(8, 5))
-        plt.plot(time, current, label="Current vs Time")
-        plt.title("Current Decay in an RC Circuit")
-        plt.xlabel("Time (s)")
-        plt.ylabel("Current (A)")
-        plt.grid(True)
-        plt.legend()
-        plt.show()
+        elif selected_equation == "f = 1 / (2πCZ)":
+            # For frequency equation, plot frequency vs impedance
+            impedance_range = np.linspace(1, 1000, 500)  # Impedance range from 1 Ω to 1000 Ω
+            capacitance = float(entry_capacitance.get())
+            frequency_values = 1 / (2 * np.pi * capacitance * impedance_range)
+            plt.figure(figsize=(8, 5))
+            plt.plot(impedance_range, frequency_values, label="Frequency vs Impedance")
+            plt.title("Frequency vs Impedance")
+            plt.xlabel("Impedance (Ω)")
+            plt.ylabel("Frequency (Hz)")
+            plt.grid(True)
+            plt.legend()
+            plt.show()
+
+        elif selected_equation == "Z = V / I":
+            voltage = float(entry_voltage.get())
+
+            # Impedance vs Current
+            current_range = np.linspace(0.01, 10, 500)  # Current range from 0.01 A to 10 A
+            impedance_values_current = voltage / current_range
+            plt.figure(figsize=(8, 5))
+            plt.plot(current_range, impedance_values_current, label="Impedance vs Current")
+            plt.title("Impedance vs Current")
+            plt.xlabel("Current (A)")
+            plt.ylabel("Impedance (Ω)")
+            plt.grid(True)
+            plt.legend()
+            plt.show()
+
+            # Impedance vs Voltage
+            voltage_range = np.linspace(0.01, 10, 500)  # Voltage range from 0.01 V to 10 V
+            impedance_values_voltage = voltage_range / current_range[0]  # Impedance = V/I (fixed I)
+            plt.figure(figsize=(8, 5))
+            plt.plot(voltage_range, impedance_values_voltage, label="Impedance vs Voltage")
+            plt.title("Impedance vs Voltage")
+            plt.xlabel("Voltage (V)")
+            plt.ylabel("Impedance (Ω)")
+            plt.grid(True)
+            plt.legend()
+            plt.show()
+
     except ValueError:
-        messagebox.showerror(
-            "Input Error", "Ensure voltage, capacitance, and resistance are valid."
-        )
+        messagebox.showerror("Input Error", "Ensure all inputs are valid for plotting.")
 
 
 def clear_fields():
@@ -220,3 +266,4 @@ def create_capacitor_tab(notebook):
     global label_result_capacitor
     label_result_capacitor = tk.Label(frame_capacitor, text="Result will appear here.")
     label_result_capacitor.grid(row=5, column=0, columnspan=2, pady=10)
+
