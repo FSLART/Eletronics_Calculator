@@ -7,21 +7,30 @@ def calculate_power(
     combo_formula, entry_voltage, entry_current, entry_resistance, label_result
 ):
     try:
+
         formula = combo_formula.get()
-        if formula == "P = V × I":
+
+        if formula == "P = V * I":
             voltage = float(entry_voltage.get())
             current = float(entry_current.get())
+
             result = voltage * current
+
             label_result.config(text=f"Power: {result:.2f} W")
-        elif formula == "P = I² × R":
+
+        elif formula == "P = I^2 * R":
             current = float(entry_current.get())
             resistance = float(entry_resistance.get())
+
             result = current**2 * resistance
+
             label_result.config(text=f"Power: {result:.2f} W")
-        elif formula == "P = V² ÷ R":
+        elif formula == "P = V^2 / R":
             voltage = float(entry_voltage.get())
             resistance = float(entry_resistance.get())
+
             result = voltage**2 / resistance
+
             label_result.config(text=f"Power: {result:.2f} W")
         else:
             label_result.config(text="Please select a formula.")
