@@ -10,6 +10,16 @@ def highlight_point(ax, time, voltage):
     plt.draw()
 
 
+def on_calc_mode_change(event):
+    mode = combo_calc_mode.get()
+    if mode == "Voltage for Given Time":
+        entry_desired_time.configure(state="normal")
+        entry_desired_voltage.configure(state="readonly")
+    else:
+        entry_desired_time.configure(state="readonly")
+        entry_desired_voltage.configure(state="normal")
+
+
 def convert_with_units(value_str, unit):
     base_value = float(value_str)
     match unit:
@@ -90,23 +100,31 @@ def calculate_discharge():
         try:
             desired_time = entry_desired_time.get()
             desired_voltage = entry_desired_voltage.get()
-            if desired_time:
-                desired_time = float(desired_time)
-                desired_voltage = final_voltage + (
-                    initial_voltage - final_voltage
-                ) * np.exp(-desired_time / time_constant)
-                highlight_point(ax, desired_time, desired_voltage)
-                entry_desired_voltage.delete(0, tk.END)
-                entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
-            elif desired_voltage:
-                desired_voltage = float(desired_voltage)
-                desired_time = -time_constant * np.log(
-                    (desired_voltage - final_voltage)
-                    / (initial_voltage - final_voltage)
-                )
-                highlight_point(ax, desired_time, desired_voltage)
-                entry_desired_time.delete(0, tk.END)
-                entry_desired_time.insert(0, f"{desired_time:.5f}")
+            if combo_calc_mode.get() == "Voltage for Given Time":
+                # The user wants to calculate voltage for a specified time
+                if desired_time:
+                    desired_time = float(desired_time)
+                    desired_voltage = final_voltage + (
+                        initial_voltage - final_voltage
+                    ) * np.exp(-desired_time / time_constant)
+                    highlight_point(ax, desired_time, desired_voltage)
+                    entry_desired_voltage.configure(state="normal")
+                    entry_desired_voltage.delete(0, tk.END)
+                    entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
+                    entry_desired_voltage.configure(state="readonly")
+            elif combo_calc_mode.get() == "Time for Given Voltage":
+                # The user wants to calculate time for a specified voltage
+                if desired_voltage:
+                    desired_voltage = float(desired_voltage)
+                    desired_time = -time_constant * np.log(
+                        (desired_voltage - final_voltage)
+                        / (initial_voltage - final_voltage)
+                    )
+                    highlight_point(ax, desired_time, desired_voltage)
+                    entry_desired_time.configure(state="normal")
+                    entry_desired_time.delete(0, tk.END)
+                    entry_desired_time.insert(0, f"{desired_time:.5f}")
+                    entry_desired_time.configure(state="readonly")
         except ValueError:
             pass  # Ignore if no valid input
 
@@ -165,23 +183,31 @@ def calculate_charge():
         try:
             desired_time = entry_desired_time.get()
             desired_voltage = entry_desired_voltage.get()
-            if desired_time:
-                desired_time = float(desired_time)
-                desired_voltage = initial_voltage + (
-                    final_voltage - initial_voltage
-                ) * (1 - np.exp(-desired_time / time_constant))
-                highlight_point(ax, desired_time, desired_voltage)
-                entry_desired_voltage.delete(0, tk.END)
-                entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
-            elif desired_voltage:
-                desired_voltage = float(desired_voltage)
-                desired_time = -time_constant * np.log(
-                    (initial_voltage - desired_voltage)
-                    / (initial_voltage - final_voltage)
-                )
-                highlight_point(ax, desired_time, desired_voltage)
-                entry_desired_time.delete(0, tk.END)
-                entry_desired_time.insert(0, f"{desired_time:.5f}")
+            if combo_calc_mode.get() == "Voltage for Given Time":
+                # The user wants to calculate voltage for a specified time
+                if desired_time:
+                    desired_time = float(desired_time)
+                    desired_voltage = initial_voltage + (
+                        final_voltage - initial_voltage
+                    ) * (1 - np.exp(-desired_time / time_constant))
+                    highlight_point(ax, desired_time, desired_voltage)
+                    entry_desired_voltage.configure(state="normal")
+                    entry_desired_voltage.delete(0, tk.END)
+                    entry_desired_voltage.insert(0, f"{desired_voltage:.5f}")
+                    entry_desired_voltage.configure(state="readonly")
+            elif combo_calc_mode.get() == "Time for Given Voltage":
+                # The user wants to calculate time for a specified voltage
+                if desired_voltage:
+                    desired_voltage = float(desired_voltage)
+                    desired_time = -time_constant * np.log(
+                        (initial_voltage - desired_voltage)
+                        / (initial_voltage - final_voltage)
+                    )
+                    highlight_point(ax, desired_time, desired_voltage)
+                    entry_desired_time.configure(state="normal")
+                    entry_desired_time.delete(0, tk.END)
+                    entry_desired_time.insert(0, f"{desired_time:.5f}")
+                    entry_desired_time.configure(state="readonly")
         except ValueError:
             pass  # Ignore if no valid input
 
@@ -242,7 +268,7 @@ def create_charge_discharge_tab(notebook):
 
     global combo_capacitance_unit
     combo_capacitance_unit = ttk.Combobox(
-        frame_capacitor, values=["kF", "F", "mF", "µF", "nF"], width=5
+        frame_capacitor, values=["kF", "F", "mF", "µF", "nF", "pF"], width=5
     )
     combo_capacitance_unit.current(0)
     combo_capacitance_unit.grid(row=3, column=2, padx=5, pady=5)
@@ -287,3 +313,20 @@ def create_charge_discharge_tab(notebook):
     explanation_text = "CAMPOS A VERMELHO SAO OBRIGATORIOS!! \nPrencher Tempo para obter Tensão,\nou preencher tensão para obter tempo!\n"
     lbl_explanation = tk.Label(frame_capacitor, text=explanation_text, justify=tk.LEFT)
     lbl_explanation.grid(row=0, column=2, rowspan=8, padx=10, pady=5, sticky="nw")
+
+    tk.Label(frame_capacitor, text="Calculation Mode:").grid(
+        row=4, column=2, padx=5, pady=5
+    )
+    global combo_calc_mode
+    combo_calc_mode = ttk.Combobox(
+        frame_capacitor,
+        values=["Voltage for Given Time", "Time for Given Voltage"],
+        width=20,
+    )
+    combo_calc_mode.current(0)
+    combo_calc_mode.bind("<<ComboboxSelected>>", on_calc_mode_change)
+    combo_calc_mode.grid(row=5, column=2, padx=5, pady=5)
+
+    # Make sure the initial states reflect the default combobox selection
+    entry_desired_time.configure(state="normal")
+    entry_desired_voltage.configure(state="readonly")

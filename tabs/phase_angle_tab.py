@@ -19,9 +19,9 @@ def calculate_phase_angle():
         xc = 1 / (omega * capacitance)
         phase_angle = np.arctan((xl - xc) / resistance) * (180 / np.pi)
 
-        messagebox.showinfo(
-            "Phase Angle", f"The phase angle is {phase_angle:.2f} degrees"
-        )
+        # Display result in text box instead of a pop-up
+        entry_phase_angle.delete(0, tk.END)
+        entry_phase_angle.insert(0, f"{phase_angle:.2f} °")
 
     except ValueError:
         messagebox.showerror("Input Error", "Please enter valid positive numbers.")
@@ -85,3 +85,11 @@ def create_phase_angle_tab(notebook):
 
     btn_clear = tk.Button(frame_phase_angle, text="Clear", command=clear_fields)
     btn_clear.grid(row=4, column=1, padx=10, pady=10)
+
+    # Create a text box to display the result (in the same or a related UI function)
+    tk.Label(frame_phase_angle, text="Phase Angle (degrees):").grid(
+        row=5, column=0, padx=10, pady=5
+    )
+    global entry_phase_angle
+    entry_phase_angle = tk.Entry(frame_phase_angle)
+    entry_phase_angle.grid(row=5, column=1, padx=10, pady=5)
