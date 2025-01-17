@@ -26,7 +26,7 @@ create_capacitor_tab(notebook)
 create_charge_discharge_tab(notebook)
 create_phase_angle_tab(notebook)
 create_cap_energy_tab(notebook)
-
+#ola
 
 # Function to clear fields when switching tabs
 def clear_fields(event):
