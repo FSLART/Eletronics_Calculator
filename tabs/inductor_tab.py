@@ -140,14 +140,16 @@ def clear_fields():
     btn_graph_inductor.grid_forget()
 
 
-def create_inductor_tab(notebook):
-    frame_inductor = ttk.Frame(notebook)
-    notebook.add(frame_inductor, text="Inductor Calculator")
-
+def create_inductor_window():
+    # inductor_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(inductor_window, text="Inductor Calculator")
+    inductor_window=tk.Toplevel()
+    inductor_window.title("Inductor Calculator")
+    inductor_window.geometry("500x400")
     # Dropdown for selecting the equation
-    tk.Label(frame_inductor, text="Select Equation:").grid(row=0, column=0, padx=10, pady=5)
+    tk.Label(inductor_window, text="Select Equation:").grid(row=0, column=0, padx=10, pady=5)
     global combo_equation
-    combo_equation = ttk.Combobox(frame_inductor, values=["L = Z / (2πf)", "Z = 2πfL", "f = Z / (2πL)"])
+    combo_equation = ttk.Combobox(inductor_window, values=["L = Z / (2πf)", "Z = 2πfL", "f = Z / (2πL)"])
     combo_equation.grid(row=0, column=1, padx=10, pady=5)
     combo_equation.set("Select an equation")
     combo_equation.bind("<<ComboboxSelected>>", update_fields)
@@ -155,11 +157,11 @@ def create_inductor_tab(notebook):
     # Indicator for the selected formula
     global selected_formula
     selected_formula = tk.StringVar(value="No formula selected")
-    tk.Label(frame_inductor, textvariable=selected_formula, fg="blue").grid(row=1, column=0, columnspan=2, pady=5)
+    tk.Label(inductor_window, textvariable=selected_formula, fg="blue").grid(row=1, column=0, columnspan=2, pady=5)
 
     # Frame for dynamic input fields
     global frame_inputs
-    frame_inputs = ttk.Frame(frame_inductor)
+    frame_inputs = ttk.Frame(inductor_window)
     frame_inputs.grid(row=2, column=0, columnspan=2, pady=10)
 
     # Input fields (initially hidden)
@@ -171,17 +173,17 @@ def create_inductor_tab(notebook):
     entry_inductance = tk.Entry(frame_inputs)
 
     # Buttons for calculation, graph, and clear
-    btn_calculate_inductor = tk.Button(frame_inductor, text="Calculate", command=calculate_inductor, bg="green", fg="white")
+    btn_calculate_inductor = tk.Button(inductor_window, text="Calculate", command=calculate_inductor, bg="green", fg="white")
     btn_calculate_inductor.grid(row=3, column=0, columnspan=2, pady=10)
 
     global btn_graph_inductor
-    btn_graph_inductor = tk.Button(frame_inductor, text="Plot Graph", command=plot_graph_inductor)
+    btn_graph_inductor = tk.Button(inductor_window, text="Plot Graph", command=plot_graph_inductor)
     btn_graph_inductor.grid_forget()  # Initially hidden
 
-    btn_clear_inductor = tk.Button(frame_inductor, text="Clear", command=clear_fields)
+    btn_clear_inductor = tk.Button(inductor_window, text="Clear", command=clear_fields)
     btn_clear_inductor.grid(row=4, column=0, columnspan=2, pady=10)
 
     # Result label
     global label_result_inductor
-    label_result_inductor = tk.Label(frame_inductor, text="Result will appear here.")
+    label_result_inductor = tk.Label(inductor_window, text="Result will appear here.")
     label_result_inductor.grid(row=5, column=0, columnspan=2, pady=10)

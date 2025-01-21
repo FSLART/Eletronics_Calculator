@@ -218,70 +218,73 @@ def clear_fields():
     entry_desired_voltage.delete(0, tk.END)
 
 
-def create_charge_discharge_tab(notebook):
-    frame_capacitor = ttk.Frame(notebook)
-    notebook.add(frame_capacitor, text="Capacitor Charge/Discharge")
+def create_cap_charge_discharge_window():
+    # cap_charge_discharge_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(cap_charge_discharge_window, text="Capacitor Charge/Discharge")
+    cap_charge_discharge_window = tk.Toplevel()
+    cap_charge_discharge_window.title("Capacitor Charge/Discharge")
+    cap_charge_discharge_window.geometry("750x350")
 
     # Input fields
-    tk.Label(frame_capacitor, text="Initial Voltage (V):", fg="red").grid(
+    tk.Label(cap_charge_discharge_window, text="Initial Voltage (V):", fg="red").grid(
         row=0, column=0, padx=10, pady=5
     )
     global entry_initial_voltage
-    entry_initial_voltage = tk.Entry(frame_capacitor)
+    entry_initial_voltage = tk.Entry(cap_charge_discharge_window)
     entry_initial_voltage.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(frame_capacitor, text="Final Voltage (V):", fg="red").grid(
+    tk.Label(cap_charge_discharge_window, text="Final Voltage (V):", fg="red").grid(
         row=1, column=0, padx=10, pady=5
     )
     global entry_final_voltage
-    entry_final_voltage = tk.Entry(frame_capacitor)
+    entry_final_voltage = tk.Entry(cap_charge_discharge_window)
     entry_final_voltage.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(frame_capacitor, text="Resistance (Ω):", fg="red").grid(
+    tk.Label(cap_charge_discharge_window, text="Resistance (Ω):", fg="red").grid(
         row=2, column=0, padx=10, pady=5
     )
     global entry_resistance
-    entry_resistance = tk.Entry(frame_capacitor)
+    entry_resistance = tk.Entry(cap_charge_discharge_window)
     entry_resistance.grid(row=2, column=1, padx=10, pady=5)
 
     global combo_resistance_unit
     combo_resistance_unit = ttk.Combobox(
-        frame_capacitor, values=["mΩ", "mΩ", "Ω", "kΩ", "MΩ", "GΩ"], width=5
+        cap_charge_discharge_window, values=["mΩ", "mΩ", "Ω", "kΩ", "MΩ", "GΩ"], width=5
     )
     combo_resistance_unit.current(0)
     combo_resistance_unit.grid(row=2, column=2, padx=0, pady=0)
 
-    tk.Label(frame_capacitor, text="Capacitance (F):", fg="red").grid(
+    tk.Label(cap_charge_discharge_window, text="Capacitance (F):", fg="red").grid(
         row=3, column=0, padx=10, pady=5
     )
     global entry_capacitance
-    entry_capacitance = tk.Entry(frame_capacitor)
+    entry_capacitance = tk.Entry(cap_charge_discharge_window)
     entry_capacitance.grid(row=3, column=1, padx=10, pady=5)
 
     global combo_capacitance_unit
     combo_capacitance_unit = ttk.Combobox(
-        frame_capacitor, values=["kF", "F", "mF", "µF", "nF", "pF"], width=5
+        cap_charge_discharge_window, values=["kF", "F", "mF", "µF", "nF", "pF"], width=5
     )
     combo_capacitance_unit.current(0)
     combo_capacitance_unit.grid(row=3, column=2, padx=0, pady=0)
 
-    tk.Label(frame_capacitor, text="Desired Time (s):").grid(
+    tk.Label(cap_charge_discharge_window, text="Desired Time (s):").grid(
         row=4, column=0, padx=10, pady=5
     )
     global entry_desired_time
-    entry_desired_time = tk.Entry(frame_capacitor)
+    entry_desired_time = tk.Entry(cap_charge_discharge_window)
     entry_desired_time.grid(row=4, column=1, padx=10, pady=5)
 
-    tk.Label(frame_capacitor, text="Desired Voltage (V):").grid(
+    tk.Label(cap_charge_discharge_window, text="Desired Voltage (V):").grid(
         row=5, column=0, padx=10, pady=5
     )
     global entry_desired_voltage
-    entry_desired_voltage = tk.Entry(frame_capacitor)
+    entry_desired_voltage = tk.Entry(cap_charge_discharge_window)
     entry_desired_voltage.grid(row=5, column=1, padx=10, pady=5)
 
     # Buttons for calculation and clear
     btn_calculate_discharge = tk.Button(
-        frame_capacitor,
+        cap_charge_discharge_window,
         text="Calculate Discharge",
         command=calculate_discharge,
         bg="green",
@@ -290,7 +293,7 @@ def create_charge_discharge_tab(notebook):
     btn_calculate_discharge.grid(row=6, column=0, padx=10, pady=10)
 
     btn_calculate_charge = tk.Button(
-        frame_capacitor,
+        cap_charge_discharge_window,
         text="Calculate Charge",
         command=calculate_charge,
         bg="blue",
@@ -298,20 +301,20 @@ def create_charge_discharge_tab(notebook):
     )
     btn_calculate_charge.grid(row=6, column=1, padx=10, pady=10)
 
-    btn_clear = tk.Button(frame_capacitor, text="Clear", command=clear_fields)
+    btn_clear = tk.Button(cap_charge_discharge_window, text="Clear", command=clear_fields)
     btn_clear.grid(row=7, column=0, columnspan=2, padx=10, pady=10)
 
     # Explanation label
     explanation_text = "CAMPOS A VERMELHO SAO OBRIGATORIOS!! \nPrencher Tempo para obter Tensão,\nou preencher tensão para obter tempo!\n"
-    lbl_explanation = tk.Label(frame_capacitor, text=explanation_text, justify=tk.LEFT)
+    lbl_explanation = tk.Label(cap_charge_discharge_window, text=explanation_text, justify=tk.LEFT)
     lbl_explanation.grid(row=0, column=2, rowspan=8, padx=10, pady=5, sticky="nw")
 
-    tk.Label(frame_capacitor, text="Calculation Mode:").grid(
+    tk.Label(cap_charge_discharge_window, text="Calculation Mode:").grid(
         row=4, column=2, padx=5, pady=5
     )
     global combo_calc_mode
     combo_calc_mode = ttk.Combobox(
-        frame_capacitor,
+        cap_charge_discharge_window,
         values=["Voltage for Given Time", "Time for Given Voltage"],
         width=20,
     )

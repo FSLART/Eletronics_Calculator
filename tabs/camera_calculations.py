@@ -92,11 +92,14 @@ def clear_fields():
     entry_d.delete(0, tk.END)
     
 
-def create_camera_tab(notebook):
-    frame_cam_calc = ttk.Frame(notebook)
-    notebook.add(frame_cam_calc, text="Camera Calculations")
+def create_camera_window():
+    # cam_calcs_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(cam_calcs_window, text="Camera Calculations")
+    cam_calcs_window = tk.Toplevel()
+    cam_calcs_window.title("Camera Calculations")
+    cam_calcs_window.geometry("900x300")
     global frame_inputs
-    frame_inputs = ttk.Frame(frame_cam_calc)
+    frame_inputs = ttk.Frame(cam_calcs_window)
     frame_inputs.grid(row=1, column=0, columnspan=2, pady=10)
 
     # Input fields (initially hidden)
@@ -171,19 +174,11 @@ def create_camera_tab(notebook):
     entry_d.grid(row=3, column=3, padx=10, pady=5)
 
     btn_calculate = tk.Button(
-        frame_cam_calc, text="Calculate", command=calculate, bg="green", fg="white"
+        cam_calcs_window, text="Calculate", command=calculate, bg="green", fg="white"
     )
     btn_calculate.grid(row=4, column=1, padx=10, pady=10)
 
-    btn_clear = tk.Button(frame_cam_calc, text="Clear", command=clear_fields)
+    btn_clear = tk.Button(cam_calcs_window, text="Clear", command=clear_fields)
     btn_clear.grid(row=4, column=0, padx=10, pady=10)
 
 
-#to be removed
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Autonomous Calculator")
-    notebook = ttk.Notebook(root)
-    notebook.pack(expand=True, fill="both")
-    create_camera_tab(notebook)
-    root.mainloop()

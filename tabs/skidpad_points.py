@@ -20,13 +20,6 @@ def calculate():
         dv_skidpad_score = 75 * ((len(final_runs)+1-rank)/len(final_runs))
 
         dc_skidpad_score = 71.5 * ((math.pow((1.5*times_ordered[0])/my_final_time,2) - 1)/1.25) + 3.5
-
-
-        print("Driverless points:")
-        print(dv_skidpad_score)
-
-        print("Driverless Cup points:")
-        print(dc_skidpad_score)
         
     elif selected_calculation.get() == "All times are given":
         first_runs_avg = []
@@ -54,12 +47,13 @@ def calculate():
         dc_skidpad_score = 71.5 * ((math.pow((1.5*times_ordered[0])/my_final_time,2) - 1)/1.25) + 3.5
 
 
-        print("Driverless points:")
-        print(dv_skidpad_score)
+    messagebox.showinfo("Results", f"Driverless points: {dv_skidpad_score}\nDriverless Cup points: {dc_skidpad_score}")
+    # print("Driverless points:")
+    # print(dv_skidpad_score)
 
-        print("Driverless Cup points:")
-        print(dc_skidpad_score)
-        clear_fields()
+    # print("Driverless Cup points:")
+    # print(dc_skidpad_score)
+    clear_fields()
         
 
 def clear_fields():
@@ -77,7 +71,7 @@ def clear_fields():
     cones_1.clear()
     cones_2.clear()
     average.clear()
-    total_values_inserted.set(f"Total de tempos inseridos: {len(cones_1)}")
+    total_values_inserted.set(f"Total of times inserted: {len(cones_1)}")
     
 
 def add_times():
@@ -92,8 +86,8 @@ def add_times():
     elif selected_calculation.get() == "Average time is given":
         average.append(float(entry_average.get()))
         cones_1.append(int(entry_cones_1.get()))
-    print(len(cones_1))
-    total_values_inserted.set(f"Total de tempos inseridos: {len(cones_1)}")
+    # print(len(cones_1))
+    total_values_inserted.set(f"Total of times inserted: {len(cones_1)}")
 
     
 
@@ -107,6 +101,7 @@ def update_fields(event):
     dropdown.grid(row=1, column=1, padx=10, pady=5)
 
     if calculation == "Average time is given":
+        clear_fields()
         tk.Label(frame_inputs, text="Average Time(s):").grid(
             row=2, column=0, padx=10, pady=5
         )
@@ -121,6 +116,7 @@ def update_fields(event):
         btn_clear.grid(row=5, column=0, padx=10, pady=10)
 
     elif calculation == "All times are given":
+        clear_fields()
         tk.Label(frame_inputs, text="Left Time 1(s):").grid(
             row=2, column=0, padx=10, pady=5
         )
@@ -150,21 +146,26 @@ def update_fields(event):
         btn_calculate.grid(row=9, column=1, padx=0, pady=10)
         btn_clear.grid(row=9, column=0, padx=10, pady=10)
 
-def create_skidpad_points_tab(notebook):
-    frame_skidpad_points = ttk.Frame(notebook)
-    notebook.add(frame_skidpad_points, text="Skidpad Points")
+def create_skidpad_points_window():
+    # skidpad_points_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function, and comment what is related to the new window
+    # notebook.add(skidpad_points_window, text="Skidpad Points")
+
+    skidpad_points_window = tk.Toplevel() 
+    skidpad_points_window.title("Skidpad Points")
+    skidpad_points_window.geometry("700x400")
+
     global selection_box, warning_text
 
-    warning_text = tk.Label(frame_skidpad_points, text="O primeiro valor a ser inserido tem de ser o da tua equipa!!", fg="red", font=("Helvetica", 15, "bold"))
+    warning_text = tk.Label(skidpad_points_window, text="O primeiro valor a ser inserido tem de ser o da tua equipa!!", fg="red", font=("Helvetica", 15, "bold"))
     warning_text.grid(row=0, column=0, columnspan=2, padx=10, pady=5)
     
-    selection_box = tk.Label(frame_skidpad_points, text="Select Calculation:")
+    selection_box = tk.Label(skidpad_points_window, text="Select Calculation:")
     selection_box.grid(row=1, column=0, padx=10, pady=5)
     
     global selected_calculation, dropdown
     selected_calculation = tk.StringVar()
     dropdown = ttk.Combobox(
-        frame_skidpad_points, textvariable=selected_calculation, width=40
+        skidpad_points_window, textvariable=selected_calculation, width=40
     )
     dropdown["values"] = (
         "Average time is given",
@@ -186,7 +187,7 @@ def create_skidpad_points_tab(notebook):
     
     # Frame for dynamic input fields
     global frame_inputs
-    frame_inputs = ttk.Frame(frame_skidpad_points)
+    frame_inputs = ttk.Frame(skidpad_points_window)
     frame_inputs.grid(row=2, column=0, columnspan=2, pady=10)
 
     # input fields (initially hidden)
@@ -201,28 +202,20 @@ def create_skidpad_points_tab(notebook):
 
     global total_values_inserted
     total_values_inserted = tk.StringVar()
-    print(len(cones_1))
+    # print(len(cones_1))
 
     global total
-    total = tk.Label(frame_skidpad_points, text="total de valores", textvariable=total_values_inserted)
+    total = tk.Label(skidpad_points_window,textvariable=total_values_inserted)
 
     total_values_inserted.set(f"Total of times inserted: {len(cones_1)}")
 
     global btn_add_times, btn_calculate, btn_clear
-    btn_add_times = tk.Button(frame_skidpad_points, text="Add Times", command=add_times)
+    btn_add_times = tk.Button(skidpad_points_window, text="Add Times", command=add_times)
     #btn_add_times.grid(row=6, column=1, padx=100, pady=10)
 
-    btn_calculate = tk.Button(frame_skidpad_points, text="Calculate", command=calculate, bg="green", fg="white")
+    btn_calculate = tk.Button(skidpad_points_window, text="Calculate", command=calculate, bg="green", fg="white")
     btn_calculate.grid(row=7, column=1, padx=0, pady=10)
 
-    btn_clear = tk.Button(frame_skidpad_points, text="Clear All", command=clear_fields)
+    btn_clear = tk.Button(skidpad_points_window, text="Clear All", command=clear_fields)
     btn_clear.grid(row=7, column=0, padx=10, pady=10)
 
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Autonomous Calculator")
-    notebook = ttk.Notebook(root)
-    notebook.pack(expand=True, fill="both")
-    create_skidpad_points_tab(notebook)
-    root.mainloop()

@@ -1,32 +1,22 @@
 import tkinter as tk
 from tkinter import ttk
-from tabs.ohms_tab import create_ohms_tab
-from tabs.power_tab import create_power_tab
-from tabs.inductor_tab import create_inductor_tab
-from tabs.capacitor_tab import create_capacitor_tab
-from tabs.capacitor_charge_discharge import create_charge_discharge_tab
-from tabs.phase_angle_tab import create_phase_angle_tab
-from tabs.cap_energy_tab import create_cap_energy_tab
-from tabs.inductor_charge_discharge import create_charge_discharge_tab_Ind
+
+from tabs.eletronics_tab import create_eletronics_tab
+from tabs.autonomous_tab import create_autonomous_tab
+from tabs.others_tab import create_others_tab
 
 # Main application window
 root = tk.Tk()
 root.title("Electronics Calculator")
+root.geometry("800x600")
 
 # Create notebook (tab manager)
 notebook = ttk.Notebook(root)
 notebook.pack(expand=True, fill="both")
 
-# Add tabs
-create_ohms_tab(notebook)
-create_power_tab(notebook)
-create_inductor_tab(notebook)
-create_charge_discharge_tab_Ind(notebook)
-create_capacitor_tab(notebook)
-create_charge_discharge_tab(notebook)
-create_phase_angle_tab(notebook)
-create_cap_energy_tab(notebook)
-
+create_eletronics_tab(notebook)
+create_autonomous_tab(notebook)
+create_others_tab(notebook)
 
 # Function to clear fields when switching tabs
 def clear_fields(event):
