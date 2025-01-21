@@ -163,18 +163,21 @@ def update_fields(event):
         entry_energy_retrieved.grid(row=2, column=1, padx=10, pady=5)
 
 
-def create_cap_energy_tab(notebook):
-    frame_cap_energy = ttk.Frame(notebook)
-    notebook.add(frame_cap_energy, text="Capacitor Energy")
+def create_cap_energy_window():
+    # cap_energy_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(cap_energy_window, text="Capacitor Energy")
 
+    cap_energy_window=tk.Toplevel()
+    cap_energy_window.title("Capacitor Energy")
+    cap_energy_window.geometry("500x300")
     # Dropdown for selecting the equation
-    tk.Label(frame_cap_energy, text="Select Calculation:").grid(
+    tk.Label(cap_energy_window, text="Select Calculation:").grid(
         row=0, column=0, padx=10, pady=5
     )
     global selected_calculation
     selected_calculation = tk.StringVar()
     dropdown = ttk.Combobox(
-        frame_cap_energy, textvariable=selected_calculation, width=40
+        cap_energy_window, textvariable=selected_calculation, width=40
     )
     dropdown["values"] = (
         "Energy Retrieved = 0.5 * C * (Vi^2 - Vf^2)",
@@ -188,7 +191,7 @@ def create_cap_energy_tab(notebook):
 
     # Frame for dynamic input fields
     global frame_inputs
-    frame_inputs = ttk.Frame(frame_cap_energy)
+    frame_inputs = ttk.Frame(cap_energy_window)
     frame_inputs.grid(row=1, column=0, columnspan=2, pady=10)
 
     # Input fields (initially hidden)
@@ -204,9 +207,9 @@ def create_cap_energy_tab(notebook):
 
     # Button for calculation and clear
     btn_calculate = tk.Button(
-        frame_cap_energy, text="Calculate", command=calculate, bg="green", fg="white"
+        cap_energy_window, text="Calculate", command=calculate, bg="green", fg="white"
     )
     btn_calculate.grid(row=2, column=0, padx=10, pady=10)
 
-    btn_clear = tk.Button(frame_cap_energy, text="Clear", command=clear_fields)
+    btn_clear = tk.Button(cap_energy_window, text="Clear", command=clear_fields)
     btn_clear.grid(row=2, column=1, padx=10, pady=10)

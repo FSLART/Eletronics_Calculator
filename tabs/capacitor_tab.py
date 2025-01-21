@@ -207,17 +207,19 @@ def clear_fields():
     btn_graph_capacitor.grid_forget()
 
 
-def create_capacitor_tab(notebook):
-    frame_capacitor = ttk.Frame(notebook)
-    notebook.add(frame_capacitor, text="Capacitor Calculator")
-
+def create_capacitor_window():
+    # capacitor_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(capacitor_window, text="Capacitor Calculator")
+    capacitor_window=tk.Toplevel()
+    capacitor_window.title("Capacitor Calculator")
+    capacitor_window.geometry("400x300")
     # Dropdown for selecting the equation
-    tk.Label(frame_capacitor, text="Select Equation:").grid(
+    tk.Label(capacitor_window, text="Select Equation:").grid(
         row=0, column=0, padx=10, pady=5
     )
     global combo_equation
     combo_equation = ttk.Combobox(
-        frame_capacitor,
+        capacitor_window,
         values=["C = 1 / (2πfZ)", "Z = 1 / (2πfC)", "f = 1 / (2πCZ)", "Z = V / I"],
     )
     combo_equation.grid(row=0, column=1, padx=10, pady=5)
@@ -226,7 +228,7 @@ def create_capacitor_tab(notebook):
 
     # Frame for dynamic input fields
     global frame_inputs
-    frame_inputs = ttk.Frame(frame_capacitor)
+    frame_inputs = ttk.Frame(capacitor_window)
     frame_inputs.grid(row=1, column=0, columnspan=2, pady=10)
 
     # Input fields (initially hidden)
@@ -244,7 +246,7 @@ def create_capacitor_tab(notebook):
 
     # Buttons for calculation, graph, and clear
     btn_calculate_capacitor = tk.Button(
-        frame_capacitor,
+        capacitor_window,
         text="Calculate",
         command=calculate_capacitor,
         bg="green",
@@ -254,16 +256,16 @@ def create_capacitor_tab(notebook):
 
     global btn_graph_capacitor
     btn_graph_capacitor = tk.Button(
-        frame_capacitor, text="Plot Graph", command=plot_graph_capacitor
+        capacitor_window, text="Plot Graph", command=plot_graph_capacitor
     )
     # Initially hidden
     btn_graph_capacitor.grid_forget()
 
-    btn_clear_capacitor = tk.Button(frame_capacitor, text="Clear", command=clear_fields)
+    btn_clear_capacitor = tk.Button(capacitor_window, text="Clear", command=clear_fields)
     btn_clear_capacitor.grid(row=4, column=0, columnspan=2, pady=10)
 
     # Result label
     global label_result_capacitor
-    label_result_capacitor = tk.Label(frame_capacitor, text="Result will appear here.")
+    label_result_capacitor = tk.Label(capacitor_window, text="Result will appear here.")
     label_result_capacitor.grid(row=5, column=0, columnspan=2, pady=10)
 

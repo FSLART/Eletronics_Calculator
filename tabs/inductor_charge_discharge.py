@@ -104,42 +104,46 @@ def clear_fields():
     entry_resistance.delete(0, tk.END)
     entry_inductance.delete(0, tk.END)
 
-def create_charge_discharge_tab_Ind(notebook):
-    frame_inductor = ttk.Frame(notebook)
-    notebook.add(frame_inductor, text="Inductor Charge/Discharge")
+def create_ind_charge_discharge_window():
+    # inductor_charge_discharge_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(inductor_charge_discharge_window, text="Inductor Charge/Discharge")
+
+    inductor_charge_discharge_window = tk.Toplevel()
+    inductor_charge_discharge_window.title("Inductor Charge/Discharge")
+    inductor_charge_discharge_window.geometry("400x300")
 
     # Input fields
-    tk.Label(frame_inductor, text="Initial Current (A):").grid(
+    tk.Label(inductor_charge_discharge_window, text="Initial Current (A):").grid(
         row=0, column=0, padx=10, pady=5
     )
     global entry_initial_current
-    entry_initial_current = tk.Entry(frame_inductor)
+    entry_initial_current = tk.Entry(inductor_charge_discharge_window)
     entry_initial_current.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(frame_inductor, text="Final Current (A):").grid(
+    tk.Label(inductor_charge_discharge_window, text="Final Current (A):").grid(
         row=1, column=0, padx=10, pady=5
     )
     global entry_final_current
-    entry_final_current = tk.Entry(frame_inductor)
+    entry_final_current = tk.Entry(inductor_charge_discharge_window)
     entry_final_current.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(frame_inductor, text="Resistance (\u03A9):").grid(
+    tk.Label(inductor_charge_discharge_window, text="Resistance (\u03A9):").grid(
         row=2, column=0, padx=10, pady=5
     )
     global entry_resistance
-    entry_resistance = tk.Entry(frame_inductor)
+    entry_resistance = tk.Entry(inductor_charge_discharge_window)
     entry_resistance.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Label(frame_inductor, text="Inductance (H):").grid(
+    tk.Label(inductor_charge_discharge_window, text="Inductance (H):").grid(
         row=3, column=0, padx=10, pady=5
     )
     global entry_inductance
-    entry_inductance = tk.Entry(frame_inductor)
+    entry_inductance = tk.Entry(inductor_charge_discharge_window)
     entry_inductance.grid(row=3, column=1, padx=10, pady=5)
 
     # Buttons for calculation and clear
     btn_calculate_discharge = tk.Button(
-        frame_inductor,
+        inductor_charge_discharge_window,
         text="Calculate Discharge",
         command=calculate_discharge,
         bg="green",
@@ -148,7 +152,7 @@ def create_charge_discharge_tab_Ind(notebook):
     btn_calculate_discharge.grid(row=4, column=0, padx=10, pady=10)
 
     btn_calculate_charge = tk.Button(
-        frame_inductor,
+        inductor_charge_discharge_window,
         text="Calculate Charge",
         command=calculate_charge,
         bg="blue",
@@ -156,5 +160,5 @@ def create_charge_discharge_tab_Ind(notebook):
     )
     btn_calculate_charge.grid(row=4, column=1, padx=10, pady=10)
 
-    btn_clear = tk.Button(frame_inductor, text="Clear", command=clear_fields)
+    btn_clear = tk.Button(inductor_charge_discharge_window, text="Clear", command=clear_fields)
     btn_clear.grid(row=5, column=0, columnspan=2, padx=10, pady=10)

@@ -53,9 +53,12 @@ def update_complex_fields_based_on_selection(event):
         entry_magnitude.config(state=tk.NORMAL)
         entry_angle.config(state=tk.NORMAL)
 
-def create_complex_tab(notebook):
-    tab = ttk.Frame(notebook)
-    notebook.add(tab, text="Complexo")
+def create_complex_tab():
+    tab = tk.Toplevel()
+    tab.title("Complexo")
+    tab.geometry("500x300")
+
+    #notebook.add(tab, text="Complexo")
 
     global entry_real, entry_imag, entry_magnitude, entry_angle, label_result_complex, combo_formula_complex
 
