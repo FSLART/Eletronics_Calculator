@@ -1,0 +1,6 @@
+# ...existing code...
+speed_km_h = 56
+acc = 4.0
+time_sec = (speed_km_h * 1000.0 / 3600.0) / acc
+print(f"{time_sec:.2f}")
+# ...existing code...
