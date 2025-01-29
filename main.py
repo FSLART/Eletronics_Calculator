@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+
 from tabs.ohms_tab import create_ohms_tab
 from tabs.power_tab import create_power_tab
 from tabs.inductor_tab import create_inductor_tab
@@ -8,9 +9,11 @@ from tabs.capacitor_charge_discharge import create_charge_discharge_tab
 from tabs.phase_angle_tab import create_phase_angle_tab
 from tabs.cap_energy_tab import create_cap_energy_tab
 from tabs.inductor_charge_discharge import create_charge_discharge_tab_Ind
+
 from tabs.converters_tab import create_converters_tab
 from tabs.resistivity_conductivity_tab import create_resistivity_conductivity_tab
 from tabs.parallels_tab import create_parallels_tab
+from tabs.filters import create_filter_tab
 
 # Main application window
 root = tk.Tk()
@@ -32,6 +35,7 @@ create_cap_energy_tab(notebook)
 create_converters_tab(notebook)
 create_resistivity_conductivity_tab(notebook)
 create_parallels_tab(notebook)
+create_filter_tab(notebook)
 
 
 # Function to clear fields when switching tabs
