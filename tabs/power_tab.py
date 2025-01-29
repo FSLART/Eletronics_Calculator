@@ -61,29 +61,33 @@ def update_fields(event, combo_formula, entries):
         entries[2].config(state="normal")
 
 
-def create_power_tab(notebook):
-    frame_power = tk.Frame(notebook)
-    notebook.add(frame_power, text="Power")
+def create_power_window():
+    # power_window = tk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function
+    # notebook.add(power_window, text="Power")
 
-    tk.Label(frame_power, text="Select Formula:").grid(row=0, column=0, padx=10, pady=5)
+    power_window= tk.Toplevel()
+    power_window.title("Power Calculator")
+    power_window.geometry("400x300")
+
+    tk.Label(power_window, text="Select Formula:").grid(row=0, column=0, padx=10, pady=5)
     equations = ["P = V * I", "P = I^2 * R", "P = V^2 / R"]
-    combo_formula = ttk.Combobox(frame_power, values=equations)
+    combo_formula = ttk.Combobox(power_window, values=equations)
     combo_formula.set("P = V * I")  # Set a default value from the list
     combo_formula.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(frame_power, text="Voltage (V):").grid(row=1, column=0, padx=10, pady=5)
-    entry_voltage = tk.Entry(frame_power)
+    tk.Label(power_window, text="Voltage (V):").grid(row=1, column=0, padx=10, pady=5)
+    entry_voltage = tk.Entry(power_window)
     entry_voltage.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(frame_power, text="Current (A):").grid(row=2, column=0, padx=10, pady=5)
-    entry_current = tk.Entry(frame_power)
+    tk.Label(power_window, text="Current (A):").grid(row=2, column=0, padx=10, pady=5)
+    entry_current = tk.Entry(power_window)
     entry_current.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Label(frame_power, text="Resistance (Ω):").grid(row=3, column=0, padx=10, pady=5)
-    entry_resistance = tk.Entry(frame_power)
+    tk.Label(power_window, text="Resistance (Ω):").grid(row=3, column=0, padx=10, pady=5)
+    entry_resistance = tk.Entry(power_window)
     entry_resistance.grid(row=3, column=1, padx=10, pady=5)
 
-    label_result = tk.Label(frame_power, text="Result will appear here.")
+    label_result = tk.Label(power_window, text="Result will appear here.")
     label_result.grid(row=5, column=0, columnspan=2, pady=10)
 
     entries = [entry_voltage, entry_current, entry_resistance]
@@ -93,7 +97,7 @@ def create_power_tab(notebook):
     )
 
     btn_calculate = tk.Button(
-        frame_power,
+        power_window,
         text="Calculate",
         command=lambda: calculate_power(
             combo_formula, entry_voltage, entry_current, entry_resistance, label_result
