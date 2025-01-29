@@ -166,4 +166,7 @@ def create_filter_tab(notebook):
     global label_result_filter
     label_result_filter = tk.Label(frame_filter, text="Result will appear here.")
     label_result_filter.grid(row=9, column=0, columnspan=2, pady=10)
+    
+    
+    
 
