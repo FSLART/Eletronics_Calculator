@@ -3,9 +3,13 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 
-def create_converters_tab(notebook):
-    tab = ttk.Frame(notebook)
-    notebook.add(tab, text="Converters")
+def create_converters_window():
+    # tab = ttk.Frame(notebook)
+    # notebook.add(tab, text="Converters")
+
+    tab = tk.Toplevel()
+    tab.title("Converters")
+    tab.geometry("800x600")
 
     # Dropdown menu for selecting converter type
     converter_label = ttk.Label(tab, text="Select Converter Type:")

@@ -2,9 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 
 
-def create_resistivity_conductivity_tab(notebook):
-    tab = ttk.Frame(notebook)
-    notebook.add(tab, text="Resistivity & Conductivity")
+def create_resistivity_conductivity_window():
+    # tab = ttk.Frame(notebook)
+    # notebook.add(tab, text="Resistivity & Conductivity")
+    tab = tk.Toplevel()
+    tab.title("Resistivity & Conductivity")
 
     # Resistivity input
     resistivity_label = ttk.Label(tab, text="Resistivity (Ω·m):")

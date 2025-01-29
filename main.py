@@ -18,6 +18,7 @@ create_eletronics_tab(notebook)
 create_autonomous_tab(notebook)
 create_others_tab(notebook)
 
+
 # Function to clear fields when switching tabs
 def clear_fields(event):
     for tab in notebook.winfo_children():
