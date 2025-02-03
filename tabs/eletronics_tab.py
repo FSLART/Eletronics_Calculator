@@ -39,7 +39,7 @@ def create_eletronics_tab(notebook):
     }
     tk.Button(
         frame_eletronics,
-        text="Capacitor Energy",
+        text="Perdu GAY",
         **button_options,
         command=create_cap_energy_window,
     ).grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
