@@ -1,14 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tabs.complex_tab import create_complex_tab
-from tabs.Retangulo_properties import create_retangulo_tab
-from tabs.Circulo_properties import create_circulo_tab
-from tabs.Triangulo_properties import create_triangle_tab
-from tabs.Senos_Properties import create_sine_law_tab
-from tabs.Trapézio_properties import create_trapezoid_tab
-from tabs.Volume_properties import   create_volume_tab
-from tabs.Calculadora_de_reatancias import create_complex_tab
+
+from tabs.Areas.complex_tab import create_complex_tab
+from tabs.Areas.Retangulo_properties import create_retangulo_tab
+from tabs.Areas.Circulo_properties import create_circulo_tab
+from tabs.Areas.Triangulo_properties import create_triangle_tab
+from tabs.Areas.Senos_Properties import create_sine_law_tab
+from tabs.Areas.Trapézio_properties import create_trapezoid_tab
+from tabs.Areas.Volume_properties import   create_volume_tab
 
  
 

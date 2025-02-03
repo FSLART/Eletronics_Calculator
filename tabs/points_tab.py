@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 
-from tabs.endurance_tab import create_endurance_tab
-from tabs.efficiency_tab import create_efficiency_tab
-from tabs.efficiency_factor_tab import create_efficiency_factor_tab
+from tabs.Points.endurance_tab import create_endurance_tab
+from tabs.Points.efficiency_tab import create_efficiency_tab
+from tabs.Points.efficiency_factor_tab import create_efficiency_factor_tab
 
 def create_points_tab(notebook):
     frame_points = ttk.Frame(notebook)

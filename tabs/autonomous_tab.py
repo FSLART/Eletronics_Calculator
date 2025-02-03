@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tabs.skidpad_points import create_skidpad_points_window
-from tabs.camera_calculations import create_camera_window
+from tabs.AD.skidpad_points import create_skidpad_points_window
+from tabs.AD.camera_calculations import create_camera_window
 
 def create_autonomous_tab(notebook):
     frame_autonomous = ttk.Frame(notebook)

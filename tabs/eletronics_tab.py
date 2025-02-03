@@ -2,19 +2,21 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-from tabs.ohms_tab import create_ohms_window
-from tabs.power_tab import create_power_window
-from tabs.inductor_tab import create_inductor_window
-from tabs.capacitor_tab import create_capacitor_window
-from tabs.capacitor_charge_discharge import create_cap_charge_discharge_window
-from tabs.phase_angle_tab import create_phase_angle_window
-from tabs.cap_energy_tab import create_cap_energy_window
-from tabs.inductor_charge_discharge import create_ind_charge_discharge_window
+from tabs.Eletro.ohms_tab import create_ohms_window
+from tabs.Eletro.power_tab import create_power_window
+from tabs.Eletro.inductor_tab import create_inductor_window
+from tabs.Eletro.capacitor_tab import create_capacitor_window
+from tabs.Eletro.capacitor_charge_discharge import create_cap_charge_discharge_window
+from tabs.Eletro.phase_angle_tab import create_phase_angle_window
+from tabs.Eletro.cap_energy_tab import create_cap_energy_window
+from tabs.Eletro.inductor_charge_discharge import create_ind_charge_discharge_window
 
-from tabs.converters_tab import create_converters_window
-from tabs.resistivity_conductivity_tab import create_resistivity_conductivity_window
-from tabs.parallels_tab import create_parallels_window
-from tabs.filters import create_filter_window
+from tabs.Eletro.converters_tab import create_converters_window
+from tabs.Eletro.resistivity_conductivity_tab import (
+    create_resistivity_conductivity_window,
+)
+from tabs.Eletro.parallels_tab import create_parallels_window
+from tabs.Eletro.filters import create_filter_window
 
 
 def create_eletronics_tab(notebook):
@@ -39,7 +41,7 @@ def create_eletronics_tab(notebook):
     }
     tk.Button(
         frame_eletronics,
-        text="Perdu GAY",
+        text="Capacitor Energy",
         **button_options,
         command=create_cap_energy_window,
     ).grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
