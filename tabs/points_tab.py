@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 
 from tabs.endurance_tab import create_endurance_tab
+from tabs.efficiency_tab import create_efficiency_tab
+from tabs.efficiency_factor_tab import create_efficiency_factor_tab
 
 def create_points_tab(notebook):
     frame_points = ttk.Frame(notebook)
@@ -27,16 +29,23 @@ def create_points_tab(notebook):
 
     tk.Button(
         frame_points,
-        text="Endurance Calculator",
+        text="Endurance Points Calculator",
         **button_options,
         command = create_endurance_tab
-    ).grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+    ).grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
 
     tk.Button(
         frame_points,
-        text="Efficienccy Calculator",
+        text="Efficienccy Points Calculator",
         **button_options,
-  #      command=create_point_midpoint_window,  # Placeholder for actual function
-    ).grid(row=2, column=0, sticky="nsew", padx=5, pady=5)
+        command=create_efficiency_tab  
+    ).grid(row=2, column=1, sticky="nsew", padx=5, pady=5)
+    
+    tk.Button(
+        frame_points,
+        text="Efficienccy Factor Calculator",
+        **button_options,
+        command= create_efficiency_factor_tab 
+    ).grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
 
     

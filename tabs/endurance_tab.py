@@ -6,7 +6,7 @@ def calculate_endurance_score():
     try:
         Pmax = float(entry_Pmax.get()) if entry_Pmax.get() else None
         Tteam = float(entry_Tteam.get()) if entry_Tteam.get() else None
-        Tmax = float(entry_Tmax.get() * 1,333) if entry_Tmax.get() else None
+        Tmax = (float(entry_Tmax.get()) * 1.333 ) if entry_Tmax.get() else None
 
         if Pmax is not None and Tteam is not None and Tmax is not None:
             endurance_score = (0.9 * Pmax * (((Tmax / Tteam) - 1) / 0.333)) + (0.1 * Pmax)
@@ -25,11 +25,12 @@ def create_endurance_tab():
     global entry_Pmax, entry_Tteam, entry_Tmax, label_result_endurance
 
     frame_endurance = tk.Toplevel()
-    frame_endurance.title("Endurance")
+    frame_endurance.title("Endurance Points")
 
     tk.Label(frame_endurance, text="Pmax").grid(row=0, column=0, padx=10, pady=5)
     entry_Pmax = tk.Entry(frame_endurance)
     entry_Pmax.grid(row=0, column=1, padx=10, pady=5)
+    entry_Pmax.insert(0, "250")
     tk.Label(frame_endurance, text="Maximum points for the event (250)").grid(row=0, column=2, padx=10, pady=5)
 
     tk.Label(frame_endurance, text="Tteam").grid(row=1, column=0, padx=10, pady=5)
