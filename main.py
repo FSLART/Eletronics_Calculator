@@ -4,6 +4,7 @@ from tkinter import ttk
 from tabs.eletronics_tab import create_eletronics_tab
 from tabs.autonomous_tab import create_autonomous_tab
 from tabs.others_tab import create_others_tab
+from tabs.points_tab import create_points_tab
 
 # Main application window
 root = tk.Tk()
@@ -17,6 +18,7 @@ notebook.pack(expand=True, fill="both")
 create_eletronics_tab(notebook)
 create_autonomous_tab(notebook)
 create_others_tab(notebook)
+create_points_tab(notebook)
 
 
 # Function to clear fields when switching tabs
