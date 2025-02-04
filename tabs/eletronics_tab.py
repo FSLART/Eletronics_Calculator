@@ -28,7 +28,8 @@ def create_eletronics_tab(notebook):
     frame_eletronics.grid_rowconfigure(1, weight=1)  # Row with first button
     frame_eletronics.grid_rowconfigure(2, weight=1)  # Row with second button
     frame_eletronics.grid_rowconfigure(3, weight=1)  # Row with third button
-    frame_eletronics.grid_rowconfigure(4, weight=1)  # Bottom empty row
+    frame_eletronics.grid_rowconfigure(4, weight=1)  # Row with forth button
+    frame_eletronics.grid_rowconfigure(5, weight=1) # Bottom empty row
     frame_eletronics.grid_columnconfigure(0, weight=1)  # Left empty column
     frame_eletronics.grid_columnconfigure(1, weight=1)  # Center column
     frame_eletronics.grid_columnconfigure(2, weight=1)  # Right column
@@ -70,7 +71,16 @@ def create_eletronics_tab(notebook):
         command=create_inductor_window,
     ).grid(row=2, column=1, sticky="nsew", padx=5, pady=5)
     tk.Button(
-        frame_eletronics, text="Ohm's Law", **button_options, command=create_ohms_window
+        frame_eletronics,
+        text="Filters",
+        **button_options,
+        command=create_filter_window,
+    ).grid(row=2, column=2, sticky="nsew", padx=5, pady=5)
+    tk.Button(
+        frame_eletronics, 
+        text="Ohm's Law", 
+        **button_options, 
+        command=create_ohms_window
     ).grid(row=3, column=0, sticky="nsew", padx=5, pady=5)
     tk.Button(
         frame_eletronics,
@@ -102,9 +112,4 @@ def create_eletronics_tab(notebook):
         **button_options,
         command=create_parallels_window,
     ).grid(row=4, column=2, sticky="nsew", padx=5, pady=5)
-    tk.Button(
-        frame_eletronics,
-        text="Filters",
-        **button_options,
-        command=create_filter_window,
-    ).grid(row=5, column=1, sticky="nsew", padx=5, pady=5)
+    

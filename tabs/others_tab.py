@@ -27,7 +27,8 @@ def create_others_tab(notebook):
     frame_others.grid_rowconfigure(3, weight=1)   # Bottom empty row
     frame_others.grid_columnconfigure(0, weight=1)  # Left empty column 
     frame_others.grid_columnconfigure(1, weight=1)  # Center column
-    frame_others.grid_columnconfigure(2, weight=1)  # Right column
+    frame_others.grid_columnconfigure(2, weight=1)  # Center column
+    frame_others.grid_columnconfigure(3, weight=1)  # Right column
 
     tk.Button(frame_others, text="Complex Numbers", **button_options, command=create_complex_tab).grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
     
