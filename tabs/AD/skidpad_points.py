@@ -120,7 +120,8 @@ def add_times():
 
 def update_fields(event):
     for widget in frame_inputs.winfo_children():
-        widget.grid_remove()
+        widget.grid_forget()
+
 
     calculation = selected_calculation.get()
     warning_text.grid(row=0, column=0, padx=10, pady=5)
@@ -197,7 +198,7 @@ def create_skidpad_points_window():
 
     warning_text = tk.Label(skidpad_points_window, text="O primeiro valor a ser inserido tem de ser o da tua equipa!!!", fg="red", font=("Helvetica", 15, "bold"))
     warning_text.grid(row=0, column=0, columnspan=2, padx=10, pady=5)
-    warning_text_2 = tk.Label(skidpad_points_window, text="O rank é o da tua equipa e não importa quando é inserido, é preencher e dexar ficar!", fg="red", font=("Helvetica", 15, "bold"))
+    warning_text_2 = tk.Label(skidpad_points_window, text="O rank é o da tua equipa e não importa quando é inserido, é preencher e deixar ficar!", fg="red", font=("Helvetica", 15, "bold"))
     warning_text_2.grid(row=1 , column=0, columnspan=2, padx=10, pady=5)
 
     
@@ -230,7 +231,8 @@ def create_skidpad_points_window():
     # Frame for dynamic input fields
     global frame_inputs
     frame_inputs = ttk.Frame(skidpad_points_window)
-    frame_inputs.grid(row=2, column=0, columnspan=2, pady=10)
+    frame_inputs.grid(row=3, column=0, columnspan=2, pady=10)
+
 
     # input fields (initially hidden)
     global entry_left_1, entry_right_1, entry_left_2, entry_right_2, entry_cones_1, entry_cones_2, entry_average, entry_rank

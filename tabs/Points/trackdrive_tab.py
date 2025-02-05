@@ -9,7 +9,7 @@ def calculate():
         tTeam= float(entry_Tteam.get()) if entry_Tteam.get() else None
         tLaps = int(entry_Tlaps.get()) if entry_Tlaps.get() else None
         pMax = 200
-        if tMax is not None and tTeam is not None and tLaps is not None:
+        if tMax is not None and tTeam is not None and tLaps is not None and tLaps <=10:
             if tTeam > 2*tMax:
                 tTeam = 2*tMax
             total= 0.75*pMax*(2*tMax/tTeam -1)+ tLaps*0.025*pMax
@@ -33,17 +33,17 @@ def create_trakdrive_points_window():
 
     global entry_Tmax, entry_Tteam, entry_Tlaps
 
-    tk.Label(trackdrive_points_window, text="Tmax:").grid(row=0, column=0, padx=10, pady=5)
+    tk.Label(trackdrive_points_window, text="Fastest team time:").grid(row=0, column=0, padx=10, pady=5)
     entry_Tmax = tk.Entry(trackdrive_points_window)
     entry_Tmax.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(trackdrive_points_window, text="Tteam:").grid(row=1, column=0, padx=10, pady=5)
+    tk.Label(trackdrive_points_window, text="My team's time:").grid(row=1, column=0, padx=10, pady=5)
     entry_Tteam = tk.Entry(trackdrive_points_window)
     entry_Tteam.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(trackdrive_points_window, text="Laps:").grid(row=2, column=0, padx=10, pady=5)
+    tk.Label(trackdrive_points_window, text="Number of laps my team completed:").grid(row=2, column=0, padx=10, pady=5)
     entry_Tlaps = tk.Entry(trackdrive_points_window)
     entry_Tlaps.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Button(trackdrive_points_window, text="Calculate", command=calculate).grid(row=3, column=0, columnspan=2, pady=10)
-    tk.Button(trackdrive_points_window, text="Clear", command=clear_fields).grid(row=4, column=0, columnspan=2, pady=10)
+    tk.Button(trackdrive_points_window, text="Calculate", command=calculate, bg="green", fg="white").grid(row=3, column=1, columnspan=2, pady=10)
+    tk.Button(trackdrive_points_window, text="Clear", command=clear_fields).grid(row=3, column=0, columnspan=2, pady=10)
