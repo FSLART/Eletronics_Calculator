@@ -6,6 +6,8 @@ from tabs.Points.efficiency_tab import create_efficiency_tab
 from tabs.Points.efficiency_factor_tab import create_efficiency_factor_tab
 from tabs.Points.trackdrive_tab import create_trakdrive_points_window
 from tabs.Points.autocross_tab import create_autocross_tab
+from tabs.Points.manual_skidpad_tab import create_manual_skidpad_tab
+from tabs.Points.dc_skidpad_tab import create_dc_skidpad_tab
 
 def create_points_tab(notebook):
     frame_points = ttk.Frame(notebook)
@@ -64,5 +66,18 @@ def create_points_tab(notebook):
         **button_options,
         command= create_efficiency_factor_tab 
     ).grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
+    
+    tk.Button(
+        frame_points,
+        text="Manual Skidpad Points Calculator",
+        **button_options,
+        command= create_manual_skidpad_tab 
+    ).grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
 
+    tk.Button(
+        frame_points,
+        text="DC Skidpad Points Calculator",
+        **button_options,
+        command= create_dc_skidpad_tab
+    ).grid(row=3, column=2, sticky="nsew", padx=5, pady=5)
     

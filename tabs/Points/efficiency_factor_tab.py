@@ -5,7 +5,7 @@ from tkinter import messagebox
 def calculate_efficiency_factor():
     try:
         T = float(entry_T.get()) if entry_T.get() else None
-        E = (float(entry_E.get() ) * 1.5) if entry_E.get() else None
+        E = float(entry_E.get() ) if entry_E.get() else None
         if T is not None and E is not None:
             efficiency_factor = T**2 * E
             label_result_efficiency_factor.config(text=f"Efficiency Factor: {efficiency_factor:.2f}")
