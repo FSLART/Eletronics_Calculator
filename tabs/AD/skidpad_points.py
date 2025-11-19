@@ -192,7 +192,6 @@ def create_skidpad_points_window():
 
     skidpad_points_window = tk.Toplevel() 
     skidpad_points_window.title("Skidpad Points")
-    skidpad_points_window.geometry("850x500")
 
     global selection_box, warning_text, warning_text_2
 
@@ -230,7 +229,7 @@ def create_skidpad_points_window():
     
     # Frame for dynamic input fields
     global frame_inputs
-    frame_inputs = ttk.Frame(skidpad_points_window)
+    frame_inputs = ttk.Frame(skidpad_points_window, width=750, height=300)
     frame_inputs.grid(row=3, column=0, columnspan=2, pady=10)
 
 

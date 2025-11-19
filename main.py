@@ -9,7 +9,7 @@ from tabs.points_tab import create_points_tab
 # Main application window
 root = tk.Tk()
 root.title("Electronics Calculator")
-root.geometry("800x600")
+root.geometry("1000x650")
 
 # Create notebook (tab manager)
 notebook = ttk.Notebook(root)

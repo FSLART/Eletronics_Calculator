@@ -97,9 +97,9 @@ def create_camera_window():
     # notebook.add(cam_calcs_window, text="Camera Calculations")
     cam_calcs_window = tk.Toplevel()
     cam_calcs_window.title("Camera Calculations")
-    cam_calcs_window.geometry("900x300")
+    # cam_calcs_window.geometry("900x400")
     global frame_inputs
-    frame_inputs = ttk.Frame(cam_calcs_window)
+    frame_inputs = ttk.Frame(cam_calcs_window, width=800, height=400)
     frame_inputs.grid(row=1, column=0, columnspan=2, pady=10)
 
     # Input fields (initially hidden)
