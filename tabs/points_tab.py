@@ -7,6 +7,19 @@ from tabs.Points.efficiency_factor_tab import create_efficiency_factor_tab
 from tabs.Points.autocross_tab import create_autocross_tab
 from tabs.Points.manual_skidpad_tab import create_manual_skidpad_tab
 
+def default_scoring_formula(tMinFactor, tMin, pMinFactor,pMax, tTeam):
+    '''
+    Pmax is the maximum points for the discipline according to table 3
+    Pmin is the minimum points for the discipline according to table 11
+    Tteam is the team's best time including penalties. Tteam is capped to Tmax .
+    Tmax is defined in table 11.
+    Tmin is the time of the fastest vehicle including penalties.
+    '''
+    pMin= pMinFactor*pMax
+    tMax = tMinFactor*tMin
+
+    return (pMax-pMin)*((tMax-tTeam)/(tMax - tMin))**2 + pMin
+
 def create_points_tab(notebook):
     frame_points = ttk.Frame(notebook)
     notebook.add(frame_points, text="Points")
