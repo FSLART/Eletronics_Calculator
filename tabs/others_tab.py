@@ -7,7 +7,7 @@ from tabs.Areas.Retangulo_properties import create_retangulo_tab
 from tabs.Areas.Circulo_properties import create_circulo_tab
 from tabs.Areas.Triangulo_properties import create_triangle_tab
 from tabs.Areas.Senos_Properties import create_sine_law_tab
-from tabs.Areas.Trapézio_properties import create_trapezoid_tab
+from tabs.Areas.Trapezio_properties import create_trapezoid_tab
 from tabs.Areas.Volume_properties import   create_volume_tab
 
  
