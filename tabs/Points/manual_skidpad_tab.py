@@ -1,9 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter import messagebox
 
 def calculate_manual_skidpad_score():
     try:
+        from tabs.points_tab import default_scoring_formula
         # 1) Ler inputs
         Pmax = float(entry_Pmax.get()) if entry_Pmax.get() else None
         Tteam_raw = float(entry_Tteam.get()) if entry_Tteam.get() else None # sem penalizações
@@ -15,14 +15,16 @@ def calculate_manual_skidpad_score():
             return
         # 2) Aplicar penalizações DOO (0.2 s por cone)
         Tteam_with_penalties = Tteam_raw + 0.2 * doo
-        # 3) Parâmetros da disciplina (Skidpad manual)
-        Pmin = 0.05 * Pmax          # 5% de Pmax
-        Tmax = 1.35 * Tmin          # Skidpad manual → Tmax = 1.35 × Tmin
-        # 4) Cap em Tmax: tempos piores que Tmax não baixam mais que Pmin
-        Tteam_effective = min(Tteam_with_penalties, Tmax)
-        # 5) Fórmula oficial de 2026:
+
+        # Fórmula oficial de 2026:
         # SCORE = (Pmax - Pmin) * ((Tmax - Tteam) / (Tmax - Tmin))^2 + Pmin
-        manual_skidpad_score = (Pmax - Pmin) * ((Tmax - Tteam_effective) / (Tmax - Tmin))**2 + Pmin
+        manual_skidpad_score = default_scoring_formula(
+            tMin=Tmin,
+            tMinFactor=1.35,
+            pMinFactor=0.05,
+            pMax=Pmax,
+            tTeam=Tteam_with_penalties
+        )
 
         label_result_manual_skidpad.config(
             text=f"Manual Skidpad score: {manual_skidpad_score:.3f}"

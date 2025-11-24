@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import TclError
+from tabs.points_tab import default_scoring_formula
 
 def calculate_dc_skidpad_score():
     try:
@@ -14,22 +15,25 @@ def calculate_dc_skidpad_score():
         if Pmax is not None and raw_Tteam is not None and Tmin is not None:
             # 25 s DISQUALIFICATION RULE (D9.2.1): based on raw time WITHOUT penalties
             if raw_Tteam > 25:
-                label_result_dc_skidpad.config(text="DISQUALIFIED: time without penalties > 25s -> Did the stopwatch fell asleep?")
+                label_result_dc_skidpad.config(text="DISQUALIFIED: time without penalties > 25s -> Did the stopwatch fall asleep?")
                 return
 
             # DOO penalties: 0.2 s per cone (D10.1.7)
             Tteam_with_penalties = raw_Tteam + 0.2 * doo
 
             # DC-only Skidpad parameters (Table 11)
-            Pmin = 0.05 * Pmax
             Tmax = 1.7 * Tmin
 
             # Cap team time at Tmax as per D9.1.1
             Tteam_effective = min(Tteam_with_penalties, Tmax)
 
-            # Default dynamic scoring formula (D9.1.1):
-            # SCORE = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
-            dc_skidpad_score = (Pmax - Pmin) * ((Tmax - Tteam_effective) / (Tmax - Tmin))**2 + Pmin
+            dc_skidpad_score = default_scoring_formula(
+                tMinFactor=1.7,
+                tMin=Tmin,
+                pMinFactor=0.05,
+                pMax=Pmax,
+                tTeam=Tteam_effective
+            )
 
             label_result_dc_skidpad.config(text=f"DC Skidpad score: {dc_skidpad_score:.3f}")
         else:
@@ -41,6 +45,7 @@ def clear_fields():
     entry_Pmax.delete(0, tk.END)
     entry_Tteam.delete(0, tk.END)
     entry_Tmax.delete(0, tk.END)
+    entry_doo.delete(0, tk.END)
 
 def create_dc_skidpad_tab():
     global entry_Pmax, entry_Tteam, entry_Tmax, label_result_dc_skidpad, entry_doo, doo
@@ -57,7 +62,7 @@ def create_dc_skidpad_tab():
     tk.Label(frame_dc_skidpad, text="Tteam [s]").grid(row=1, column=0, padx=10, pady=5)
     entry_Tteam = tk.Entry(frame_dc_skidpad)
     entry_Tteam.grid(row=1, column=1, padx=10, pady=5)
-    tk.Label(frame_dc_skidpad, text="Team’s best autonomous mode time including penalties (D9.1.1) - page 132").grid(row=1, column=2, padx=10, pady=5)
+    tk.Label(frame_dc_skidpad, text="Team’s best autonomous mode time WITHOUT penalties - D9.1.1").grid(row=1, column=2, padx=10, pady=5)
 
     tk.Label(frame_dc_skidpad, text="DOO").grid(row=2, column=0, padx=10, pady=5)
     entry_doo = tk.Entry(frame_dc_skidpad)

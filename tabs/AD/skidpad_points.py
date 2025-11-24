@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from tabs.points_tab import default_scoring_formula
 import math
 
 
@@ -35,15 +36,15 @@ def calculate():
         # Generic dynamic formula:
         # Score = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
         Pmax = SKIDPAD_DC_PMAX
-        Pmin = 0.05 * Pmax
         Tmin = sorted_final_times[0]       # Best valid time across all teams
-        Tteam = team_final_time            # This team's best time after penalties
-        Tmax = 1.7 * Tmin                  # DC skidpad multiplier
 
-        # Cap team time at Tmax according to FSG D9.1.1
-        Tteam_effective = min(Tteam, Tmax)
-
-        dc_skidpad_score = (Pmax - Pmin) * ((Tmax - Tteam_effective) / (Tmax - Tmin))**2 + Pmin
+        dc_skidpad_score = default_scoring_formula(
+            tMin= Tmin,
+            tMinFactor= 1.7,
+            pMinFactor= 0.05,
+            pMax= Pmax,
+            tTeam= team_final_time
+        )
         
     elif selected_calculation.get() == "All times are given":
         first_runs_avg = []
@@ -83,15 +84,16 @@ def calculate():
         # Generic dynamic scoring formula:
         # Score = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
         Pmax = SKIDPAD_DC_PMAX
-        Pmin = 0.05 * Pmax
         Tmin = sorted_final_times[0]       # Best valid time across all teams
-        Tteam = team_final_time            # This (LART :) team's best time after penalties
-        Tmax = 1.7 * Tmin                  # DC skidpad multiplier
 
-        # Cap team time at Tmax according to FSG D9.1.1
-        Tteam_effective = min(Tteam, Tmax)
-        dc_skidpad_score = (Pmax - Pmin) * ((Tmax - Tteam_effective) / (Tmax - Tmin))**2 + Pmin
 
+        dc_skidpad_score = default_scoring_formula(
+            tMin= Tmin,
+            tMinFactor= 1.7,
+            pMinFactor= 0.05,
+            pMax= Pmax,
+            tTeam= team_final_time
+        )
     messagebox.showinfo("Results", f"Driverless points: {dv_skidpad_score}\nDriverless Cup points: {dc_skidpad_score}")
     clear_fields()
         
