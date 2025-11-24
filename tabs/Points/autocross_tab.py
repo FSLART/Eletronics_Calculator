@@ -5,13 +5,21 @@ from tkinter import messagebox
 
 def calculate():
     Pmax = 100
+    Pmin = 0.1*Pmax
 
     if selected_calculation.get() == "Manual Mode":
+        # Tteam = float(entry_Tteam.get())
+        # Tmax = float(entry_Tmax.get())
+        # Tmax = Tmax * 1.25
+        # result = 0.95 * Pmax * (((Tmax/Tteam) - 1)/0.25) + 0.05 * Pmax
+        Tmin = float(entry_Tmin.get())
+        Tmax = 1.4 * Tmin
         Tteam = float(entry_Tteam.get())
-        Tmax = float(entry_Tmax.get())
-        Tmax = Tmax * 1.25
-        result = 0.95 * Pmax * (((Tmax/Tteam) - 1)/0.25) + 0.05 * Pmax
-    
+        if Tteam > Tmax:
+            Tteam = Tmax
+
+        result = (Pmax - Pmin) * pow(((Tmax - Tteam)/(Tmax - Tmin)), 2) + Pmin
+        
     elif selected_calculation.get() == "DC":
         Tteam1 = float(entry_Tteam1.get())
         Tteam2 = float(entry_Tteam2.get())
@@ -50,7 +58,7 @@ def update_fields(event):
         tk.Label(frame_inputs, text="Best time overall with penalties:").grid(
             row=3, column=0, padx=10, pady=5
         )
-        entry_Tmax.grid(row=3, column=1, padx=10, pady=5)
+        entry_Tmin.grid(row=3, column=1, padx=10, pady=5)
         btn_calculate.grid(row=5, column=1, padx=0, pady=10)
         btn_clear.grid(row=5, column=0, padx=10, pady=10)
 
@@ -77,7 +85,6 @@ def update_fields(event):
 
 def clear_fields():
     entry_Tteam.delete(0, tk.END)
-    entry_Tmax.delete(0, tk.END)
     entry_Tteam1.delete(0, tk.END)
     entry_Tteam2.delete(0, tk.END)
     entry_lenght.delete(0, tk.END)
@@ -115,9 +122,8 @@ def create_autocross_tab():
     frame_inputs.grid(row=2, column=0, columnspan=2, pady=10)
 
     # input fields (initially hidden)
-    global entry_Tteam, entry_Tmax, entry_Tteam1, entry_Tteam2, entry_lenght, entry_Tmin 
+    global entry_Tteam, entry_Tteam1, entry_Tteam2, entry_lenght, entry_Tmin 
     entry_Tteam = tk.Entry(frame_inputs)
-    entry_Tmax = tk.Entry(frame_inputs)
     entry_Tteam1 = tk.Entry(frame_inputs)
     entry_Tteam2 = tk.Entry(frame_inputs)
     entry_lenght = tk.Entry(frame_inputs)
