@@ -6,10 +6,32 @@ def calculate_endurance_score():
     try:
         Pmax = float(entry_Pmax.get()) if entry_Pmax.get() else None
         Tteam = float(entry_Tteam.get()) if entry_Tteam.get() else None
-        Tmax = (float(entry_Tmax.get()) * 1.333 ) if entry_Tmax.get() else None
+        
+        # De acordo com a Tabela 11 das regras 2026, Tmax = 1.5 * Tmin
+        # Tmin deve ter o valor de entry_Tmax pois este é o tempo do veículo mais rápido
+        Tmin = float(entry_Tmin.get()) if entry_Tmin.get() else None
+        
+        if Pmax is not None and Tteam is not None and Tmin is not None:
+            # 1. Calcular o Tmax real baseado na Tabela 11
+            Tmax = Tmin * 1.5 
+            
+            # 2. Calcular o Pmin (0.1 * Pmax segundo a Tabela 11)
+            Pmin = 0.1 * Pmax
 
-        if Pmax is not None and Tteam is not None and Tmax is not None:
-            endurance_score = (0.9 * Pmax * (((Tmax / Tteam) - 1) / 0.333)) + (0.1 * Pmax)
+            #3. Verificar se os tempos inseridos são válidos
+            if Tteam < Tmin:
+                messagebox.showerror("Erro de Dados", "O tempo da equipa (Tteam) não pode ser inferior ao tempo do veículo mais rápido (Tmin).")
+                return
+
+            # 4. Verificar se o tempo da equipa excede o Tmax (Tempo máximo para a prova)
+            if Tteam >= Tmax:
+                endurance_score = Pmin
+            else:
+                # 5. Fórmula para o cálculo de pontos
+                # Score = (Pmax - Pmin) * ( (Tmax - Tteam) / (Tmax - Tmin) )^2 + Pmin
+                term = (Tmax - Tteam) / (Tmax - Tmin)
+                endurance_score = (Pmax - Pmin) * (term ** 2) + Pmin
+
             label_result_endurance.config(text=f"Endurance Score: {endurance_score:.2f}")
         else:
             label_result_endurance.config(text="Por favor, preencha os campos necessários.")
@@ -19,10 +41,10 @@ def calculate_endurance_score():
 def clear_fields():
     entry_Pmax.delete(0, tk.END)
     entry_Tteam.delete(0, tk.END)
-    entry_Tmax.delete(0, tk.END)
+    entry_Tmin.delete(0, tk.END)
 
 def create_endurance_tab():
-    global entry_Pmax, entry_Tteam, entry_Tmax, label_result_endurance
+    global entry_Pmax, entry_Tteam, entry_Tmin, label_result_endurance
 
     frame_endurance = tk.Toplevel()
     frame_endurance.title("Endurance Points")
@@ -38,9 +60,9 @@ def create_endurance_tab():
     entry_Tteam.grid(row=1, column=1, padx=10, pady=5)
     tk.Label(frame_endurance, text="Team corrected elapsed time. Tteam is capped at Tmax").grid(row=1, column=2, padx=10, pady=5)
 
-    tk.Label(frame_endurance, text="Tmax").grid(row=2, column=0, padx=10, pady=5)
-    entry_Tmax = tk.Entry(frame_endurance) 
-    entry_Tmax.grid(row=2, column=1, padx=10, pady=5)
+    tk.Label(frame_endurance, text="Tmin").grid(row=2, column=0, padx=10, pady=5)
+    entry_Tmin = tk.Entry(frame_endurance) 
+    entry_Tmin.grid(row=2, column=1, padx=10, pady=5)
     tk.Label(frame_endurance, text="Corrected elapsed time of the fastest vehicle.").grid(row=2, column=2, padx=10, pady=5)
     
     
