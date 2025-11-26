@@ -1,68 +1,100 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from tabs.points_tab import default_scoring_formula
 import math
 
 
+SKIDPAD_DC_PMAX = 75  # maximum points for DC Skidpad (FSG 2026 Table 3)
+SKIDPAD_DV_PMAX = 75  # Maximu points for Driverless Skidpad (FSG 2026 Table 3)
+
 def calculate():
-    if cones_1 == []:
-        messagebox.showerror("Error", "Please insert at least one time.")
+    if cones_run1 == []:
+        messagebox.showerror("Error", "Please insert at least one time, this isn't Mario Kart")
         return
     if selected_calculation.get() == "Average time is given":
-        final_runs = []
-        my_final_time = average[0]
-        for i in range(len(average)):
-            final_runs.append(average[i] + 0.2*cones_1[i])
-        times_ordered = sorted(final_runs)
+        final_times_all_teams = []
+        team_final_time = avg_times[0] + 0.2 * cones_run1[0]
+        # 25s DISQUALIFICATION RULE (FSG_2026): based on raw time without penalties
+        if avg_times[0] > 25:
+            messagebox.showerror("DISQUALIFIED", "DISQUALIFIED: Run time without penalties > 25s - please be faster next time!")
+            clear_fields()
+            return
+        for i in range(len(avg_times)):
+            final_times_all_teams.append(avg_times[i] + 0.2*cones_run1[i])
+        sorted_final_times = sorted(final_times_all_teams)
 
-        #rank = times_ordered.index(my_final_time) + 1
         try:
-            rank = int(entry_rank.get())
+            team_rank = int(entry_rank.get())
         except:
             messagebox.showerror("Error", "Please insert a valid rank.")
             return
 
-        dv_skidpad_score = 75 * ((len(final_runs)+1-rank)/len(final_runs))
+        dv_skidpad_score = SKIDPAD_DV_PMAX * ((len(final_times_all_teams) + 1 - team_rank) / len(final_times_all_teams))
 
-        dc_skidpad_score = 71.5 * ((math.pow((1.5*times_ordered[0])/my_final_time,2) - 1)/1.25) + 3.5
+        # --- DC SKIDPAD SCORING (FSG rulebook 2026) ---
+        # Generic dynamic formula:
+        # Score = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
+        Pmax = SKIDPAD_DC_PMAX
+        Tmin = sorted_final_times[0]       # Best valid time across all teams
+
+        dc_skidpad_score = default_scoring_formula(
+            tMin= Tmin,
+            tMinFactor= 1.7,
+            pMinFactor= 0.05,
+            pMax= Pmax,
+            tTeam= team_final_time
+        )
         
     elif selected_calculation.get() == "All times are given":
         first_runs_avg = []
         second_runs_avg = []
+        final_times_all_teams = []
 
-        final_runs = []
-
-        for i in range(len(left_1)):
-
-            first_runs_avg.append( ((left_1[i]+right_1[i])/2)+0.2*cones_1[i] )
-            second_runs_avg.append( ((left_2[i]+right_2[i])/2)+0.2*cones_2[i] )
+        for i in range(len(left_run1)):
+            first_runs_avg.append( ((left_run1[i]+right_run1[i])/2)+0.2*cones_run1[i] )
+            second_runs_avg.append( ((left_run2[i]+right_run2[i])/2)+0.2*cones_run2[i] )
 
             if first_runs_avg[i] < second_runs_avg[i]:
-                final_runs.append(first_runs_avg[i])
+                final_times_all_teams.append(first_runs_avg[i])
             else:
-                final_runs.append(second_runs_avg[i])
+                final_times_all_teams.append(second_runs_avg[i])
 
-        my_final_time = final_runs[0]
-        times_ordered = sorted(final_runs)
+        team_final_time = final_times_all_teams[0]
+        # 25s DISQUALIFICATION RULE (FSG_2026): based on raw time without penalties
+        raw_first_run = (left_run1[0] + right_run1[0]) / 2
+        raw_second_run = (left_run2[0] + right_run2[0]) / 2
+        best_raw_run = raw_first_run if raw_first_run < raw_second_run else raw_second_run
 
-        #rank = times_ordered.index(my_final_time) + 1
+        if best_raw_run > 25:
+            messagebox.showerror("DISQUALIFIED", "DISQUALIFIED: Run time without penalties > 25s -> try the pedal is on the right")
+            clear_fields()
+            return
+        sorted_final_times = sorted(final_times_all_teams)
+
+        #team_rank = sorted_final_times.index(team_final_time) + 1
         try:
-            rank = int(entry_rank.get())
+            team_rank = int(entry_rank.get())
         except:
             messagebox.showerror("Error", "Please insert a valid rank.")
             return
         
-        dv_skidpad_score = 75 * ((len(final_runs)+1-rank)/len(final_runs))
+        dv_skidpad_score = SKIDPAD_DV_PMAX * ((len(final_times_all_teams) + 1 - team_rank) / len(final_times_all_teams))
+        # --- DC SKIDPAD SCORING (FSG rulebook 2026) ---
+        # Generic dynamic scoring formula:
+        # Score = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
+        Pmax = SKIDPAD_DC_PMAX
+        Tmin = sorted_final_times[0]       # Best valid time across all teams
 
-        dc_skidpad_score = 71.5 * ((math.pow((1.5*times_ordered[0])/my_final_time,2) - 1)/1.25) + 3.5
 
-
+        dc_skidpad_score = default_scoring_formula(
+            tMin= Tmin,
+            tMinFactor= 1.7,
+            pMinFactor= 0.05,
+            pMax= Pmax,
+            tTeam= team_final_time
+        )
     messagebox.showinfo("Results", f"Driverless points: {dv_skidpad_score}\nDriverless Cup points: {dc_skidpad_score}")
-    # print("Driverless points:")
-    # print(dv_skidpad_score)
-
-    # print("Driverless Cup points:")
-    # print(dc_skidpad_score)
     clear_fields()
         
 
@@ -75,25 +107,25 @@ def clear_fields():
     entry_cones_2.delete(0, tk.END)
     entry_average.delete(0, tk.END)
     entry_rank.delete(0, tk.END)
-    left_1.clear()
-    right_1.clear()
-    left_2.clear()
-    right_2.clear()
-    cones_1.clear()
-    cones_2.clear()
-    average.clear()
-    total_values_inserted.set(f"Total of times inserted: {len(cones_1)}")
+    left_run1.clear()
+    right_run1.clear()
+    left_run2.clear()
+    right_run2.clear()
+    cones_run1.clear()
+    cones_run2.clear()
+    avg_times.clear()
+    total_values_inserted.set(f"Total of times inserted: {len(cones_run1)}")
     
 
 def add_times():
     if selected_calculation.get() == "All times are given":
         try:
-            left_1.append(float(entry_left_1.get()))
-            right_1.append(float(entry_right_1.get()))
-            left_2.append(float(entry_left_2.get()))
-            right_2.append(float(entry_right_2.get()))
-            cones_1.append(int(entry_cones_1.get()))
-            cones_2.append(int(entry_cones_2.get()))
+            left_run1.append(float(entry_left_1.get()))
+            right_run1.append(float(entry_right_1.get()))
+            left_run2.append(float(entry_left_2.get()))
+            right_run2.append(float(entry_right_2.get()))
+            cones_run1.append(int(entry_cones_1.get()))
+            cones_run2.append(int(entry_cones_2.get()))
             entry_left_1.delete(0, tk.END)
             entry_right_1.delete(0, tk.END)
             entry_left_2.delete(0, tk.END)
@@ -102,19 +134,19 @@ def add_times():
             entry_cones_2.delete(0, tk.END)
             entry_average.delete(0, tk.END)
         except:
-            messagebox.showerror("Error", "Please insert all times.")
+            messagebox.showerror("Error", "Please insert all times. I can't guess them")
 
 
     elif selected_calculation.get() == "Average time is given":
         try:
-            average.append(float(entry_average.get()))
-            cones_1.append(int(entry_cones_1.get()))
+            avg_times.append(float(entry_average.get()))
+            cones_run1.append(int(entry_cones_1.get()))
             entry_average.delete(0, tk.END)
             entry_cones_1.delete(0, tk.END)
         except:
-            messagebox.showerror("Error", "Please insert all times.")
-    # print(len(cones_1))
-    total_values_inserted.set(f"Total of times inserted: {len(cones_1)}")
+            messagebox.showerror("Error", "Please insert all times. Telepathy not supported...YET!")
+    # print(len(cones_run1))
+    total_values_inserted.set(f"Total of times inserted: {len(cones_run1)}")
 
     
 
@@ -140,9 +172,9 @@ def update_fields(event):
         )
         entry_cones_1.grid(row=4, column=1, padx=10, pady=5)
 
-        if len(cones_1) == 0:
+        if len(cones_run1) == 0:
             entry_rank.grid(row=5, column=1, padx=10, pady=5)
-            tk.Label(frame_inputs, text="Rank of your team:").grid(row=5, column=0, padx=10, pady=5)
+            tk.Label(frame_inputs, text="Overall rank of your team:").grid(row=5, column=0, padx=10, pady=5)
 
         total.grid(row=6, column=0, padx=10, pady=5)
         btn_add_times.grid(row=6, column=1, padx=100, pady=10)
@@ -177,9 +209,9 @@ def update_fields(event):
         )
         entry_cones_2.grid(row=8, column=1, padx=10, pady=5)
 
-        if len(cones_1) == 0:
+        if len(cones_run1) == 0:
             entry_rank.grid(row=9, column=1, padx=10, pady=5)
-            tk.Label(frame_inputs, text="Rank of your team:").grid(row=9, column=0, padx=10, pady=5)
+            tk.Label(frame_inputs, text="Overall rank of your team:").grid(row=9, column=0, padx=10, pady=5)
 
         total.grid(row=10, column=0, padx=10, pady=5)
         btn_add_times.grid(row=10, column=1, padx=100, pady=10)
@@ -218,14 +250,14 @@ def create_skidpad_points_window():
     dropdown.grid(row=2, column=1, padx=10, pady=5)
 
     # global variables for the times and cones
-    global left_1, right_1, left_2, right_2, cones_1, cones_2, average, rank
-    left_1 = []
-    right_1 = []
-    left_2 = []
-    right_2 = []
-    cones_1 = []
-    cones_2 = []
-    average = []
+    global left_run1, right_run1, left_run2, right_run2, cones_run1, cones_run2, avg_times, rank
+    left_run1 = []
+    right_run1 = []
+    left_run2 = []
+    right_run2 = []
+    cones_run1 = []
+    cones_run2 = []
+    avg_times = []
     
     # Frame for dynamic input fields
     global frame_inputs
@@ -246,12 +278,12 @@ def create_skidpad_points_window():
 
     global total_values_inserted
     total_values_inserted = tk.StringVar()
-    # print(len(cones_1))
+    # print(len(cones_run1))
 
     global total
     total = tk.Label(skidpad_points_window,textvariable=total_values_inserted)
 
-    total_values_inserted.set(f"Total of times inserted: {len(cones_1)}")
+    total_values_inserted.set(f"Total of times inserted: {len(cones_run1)}")
 
     global btn_add_times, btn_calculate, btn_clear
     btn_add_times = tk.Button(skidpad_points_window, text="Add Times", command=add_times)
@@ -262,4 +294,3 @@ def create_skidpad_points_window():
 
     btn_clear = tk.Button(skidpad_points_window, text="Clear All", command=clear_fields)
     btn_clear.grid(row=8, column=0, padx=10, pady=10)
-

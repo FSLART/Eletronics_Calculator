@@ -18,7 +18,7 @@ def default_scoring_formula(tMinFactor, tMin, pMinFactor,pMax, tTeam):
     pMin= pMinFactor*pMax
     tMax = tMinFactor*tMin
 
-    return (pMax-pMin)*((tMax-tTeam)/(tMax - tMin))**2 + pMin
+    return (pMax-pMin)*((tMax-min(tTeam,tMax))/(tMax - tMin))**2 + pMin
 
 def create_points_tab(notebook):
     frame_points = ttk.Frame(notebook)
