@@ -6,8 +6,9 @@ from tabs.Points.efficiency_tab import create_efficiency_tab
 from tabs.Points.efficiency_factor_tab import create_efficiency_factor_tab
 from tabs.Points.autocross_tab import create_autocross_tab
 from tabs.Points.manual_skidpad_tab import create_manual_skidpad_tab
+from tabs.Points.manual_acceleration import create_manual_acceleration_tab
 
-def default_scoring_formula(tMinFactor, tMin, pMinFactor,pMax, tTeam):
+def default_scoring_formula(tMaxFactor, tMin, pMinFactor,pMax, tTeam):
     '''
     Pmax is the maximum points for the discipline according to table 3
     Pmin is the minimum points for the discipline according to table 11
@@ -16,7 +17,7 @@ def default_scoring_formula(tMinFactor, tMin, pMinFactor,pMax, tTeam):
     Tmin is the time of the fastest vehicle including penalties.
     '''
     pMin= pMinFactor*pMax
-    tMax = tMinFactor*tMin
+    tMax = tMaxFactor*tMin
 
     return (pMax-pMin)*((tMax-min(tTeam,tMax))/(tMax - tMin))**2 + pMin
 
@@ -73,8 +74,15 @@ def create_points_tab(notebook):
     
     tk.Button(
         frame_points,
-        text="Manual Skidpad Points Calculator",
+        text="Manual Skidpad \n Points Calculator",
         **button_options,
         command= create_manual_skidpad_tab 
     ).grid(row=3, column=1, sticky="nsew", padx=5, pady=5)
+
+    tk.Button(
+        frame_points,
+        text="Manual Acceleration \n Points Calculator",
+        **button_options,
+        command= create_manual_acceleration_tab 
+    ).grid(row=3, column=2, sticky="nsew", padx=5, pady=5)
     

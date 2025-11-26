@@ -36,6 +36,7 @@ def clear_fields():
     entry_Pmax.delete(0, tk.END)
     entry_Tteam.delete(0, tk.END)
     entry_Tmax.delete(0, tk.END)
+    entry_doo.delete(0, tk.END)
 
 def create_manual_skidpad_tab():
     global entry_Pmax, entry_Tteam, entry_Tmax, label_result_manual_skidpad, entry_doo, doo

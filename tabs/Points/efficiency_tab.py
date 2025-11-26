@@ -1,20 +1,17 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tabs.points_tab import default_scoring_formula
 
 def calculate_efficiency_score():
     try:
+        from tabs.points_tab import default_scoring_formula
         Pmax = float(entry_Pmax.get()) if entry_Pmax.get() else 75.0
         EFteam = float(entry_EFteam.get()) if entry_EFteam.get() else None
         EFmin = float(entry_EFmin.get()) if entry_EFmin.get() else None
         if Pmax is not None and EFteam is not None and EFmin is not None:
             EFmax = EFmin * 2
-            if EFteam > EFmax:
-                eff_input = EFmax
-            else:
-                eff_input = EFteam
-            efficiency_score = default_scoring_formula(2, EFmin, 0, Pmax, eff_input)
+            
+            efficiency_score = Pmax * ((EFmax- EFteam)/(EFmax - EFmin))**2
             
             label_result_efficiency.config(text=f"Efficiency Score: {efficiency_score:.2f}")
         else:
