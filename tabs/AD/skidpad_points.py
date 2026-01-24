@@ -89,7 +89,7 @@ def calculate():
 
         dc_skidpad_score = default_scoring_formula(
             tMin= Tmin,
-            tMinFactor= 1.7,
+            tMaxFactor= 1.7,
             pMinFactor= 0.05,
             pMax= Pmax,
             tTeam= team_final_time
