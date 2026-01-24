@@ -9,9 +9,11 @@ SKIDPAD_DC_PMAX = 75  # maximum points for DC Skidpad (FSG 2026 Table 3)
 SKIDPAD_DV_PMAX = 75  # Maximu points for Driverless Skidpad (FSG 2026 Table 3)
 
 def calculate():
-    if cones_run1 == []:
-        messagebox.showerror("Error", "Please insert at least one time, this isn't Mario Kart")
-        return
+    if selected_calculation.get() != "Rank and total teams":
+        if cones_run1 == []:
+            messagebox.showerror("Error", "Please insert at least one time, this isn't Mario Kart")
+            return
+    
     if selected_calculation.get() == "Average time is given":
         final_times_all_teams = []
         team_final_time = avg_times[0] + 0.2 * cones_run1[0]
@@ -24,11 +26,8 @@ def calculate():
             final_times_all_teams.append(avg_times[i] + 0.2*cones_run1[i])
         sorted_final_times = sorted(final_times_all_teams)
 
-        try:
-            team_rank = int(entry_rank.get())
-        except:
-            messagebox.showerror("Error", "Please insert a valid rank.")
-            return
+        # Calculate team rank based on best run time
+        team_rank = sorted_final_times.index(team_final_time) + 1
 
         dv_skidpad_score = SKIDPAD_DV_PMAX * ((len(final_times_all_teams) + 1 - team_rank) / len(final_times_all_teams))
 
@@ -72,12 +71,8 @@ def calculate():
             return
         sorted_final_times = sorted(final_times_all_teams)
 
-        #team_rank = sorted_final_times.index(team_final_time) + 1
-        try:
-            team_rank = int(entry_rank.get())
-        except:
-            messagebox.showerror("Error", "Please insert a valid rank.")
-            return
+        # Calculate team rank based on best run time
+        team_rank = sorted_final_times.index(team_final_time) + 1
         
         dv_skidpad_score = SKIDPAD_DV_PMAX * ((len(final_times_all_teams) + 1 - team_rank) / len(final_times_all_teams))
         # --- DC SKIDPAD SCORING (FSG rulebook 2026) ---
@@ -94,6 +89,30 @@ def calculate():
             pMax= Pmax,
             tTeam= team_final_time
         )
+    
+    elif selected_calculation.get() == "Rank and total teams":
+        try:
+            team_rank = int(entry_rank.get())
+            total_teams = int(entry_total_teams.get())
+        except:
+            messagebox.showerror("Error", "Please insert valid rank and total teams.")
+            return
+        
+        if team_rank < 1 or team_rank > total_teams:
+            messagebox.showerror("Error", "Team rank must be between 1 and total teams.")
+            return
+        
+        # Driverless Skidpad Score
+        dv_skidpad_score = SKIDPAD_DV_PMAX * ((total_teams + 1 - team_rank) / total_teams)
+        
+        # For DC Skidpad, we use a simplified formula without actual times
+        # Score based on rank only: best rank gets highest score
+        Pmax = SKIDPAD_DC_PMAX
+        Pmin = Pmax * 0.05  # pMinFactor = 0.05
+        
+        # Simplified scoring: linear interpolation based on rank
+        dc_skidpad_score = Pmax - ((team_rank - 1) / (total_teams - 1)) * (Pmax - Pmin) if total_teams > 1 else Pmax
+    
     messagebox.showinfo("Results", f"Driverless points: {dv_skidpad_score}\nDriverless Cup points: {dc_skidpad_score}")
     clear_fields()
         
@@ -107,6 +126,7 @@ def clear_fields():
     entry_cones_2.delete(0, tk.END)
     entry_average.delete(0, tk.END)
     entry_rank.delete(0, tk.END)
+    entry_total_teams.delete(0, tk.END)
     left_run1.clear()
     right_run1.clear()
     left_run2.clear()
@@ -172,9 +192,6 @@ def update_fields(event):
         )
         entry_cones_1.grid(row=4, column=1, padx=10, pady=5)
 
-        if len(cones_run1) == 0:
-            entry_rank.grid(row=5, column=1, padx=10, pady=5)
-            tk.Label(frame_inputs, text="Overall rank of your team:").grid(row=5, column=0, padx=10, pady=5)
 
         total.grid(row=6, column=0, padx=10, pady=5)
         btn_add_times.grid(row=6, column=1, padx=100, pady=10)
@@ -209,14 +226,24 @@ def update_fields(event):
         )
         entry_cones_2.grid(row=8, column=1, padx=10, pady=5)
 
-        if len(cones_run1) == 0:
-            entry_rank.grid(row=9, column=1, padx=10, pady=5)
-            tk.Label(frame_inputs, text="Overall rank of your team:").grid(row=9, column=0, padx=10, pady=5)
-
         total.grid(row=10, column=0, padx=10, pady=5)
         btn_add_times.grid(row=10, column=1, padx=100, pady=10)
         btn_calculate.grid(row=11, column=1, padx=0, pady=10)
         btn_clear.grid(row=11, column=0, padx=10, pady=10)
+
+    elif calculation == "Rank and total teams":
+        clear_fields()
+        tk.Label(frame_inputs, text="Your Team Rank:").grid(
+            row=3, column=0, padx=10, pady=5
+        )
+        entry_rank.grid(row=3, column=1, padx=10, pady=5)
+        tk.Label(frame_inputs, text="Total Number of Teams:").grid(
+            row=4, column=0, padx=10, pady=5
+        )
+        entry_total_teams.grid(row=4, column=1, padx=10, pady=5)
+
+        btn_calculate.grid(row=5, column=1, padx=0, pady=10)
+        btn_clear.grid(row=5, column=0, padx=10, pady=10)
 
 def create_skidpad_points_window():
     # skidpad_points_window = ttk.Frame(notebook) #this creates a tab need to add 'notebook' as a parameter of this function, and comment what is related to the new window
@@ -229,7 +256,7 @@ def create_skidpad_points_window():
 
     warning_text = tk.Label(skidpad_points_window, text="O primeiro valor a ser inserido tem de ser o da tua equipa!!!", fg="red", font=("Helvetica", 15, "bold"))
     warning_text.grid(row=0, column=0, columnspan=2, padx=10, pady=5)
-    warning_text_2 = tk.Label(skidpad_points_window, text="O rank é o da tua equipa e não importa quando é inserido, é preencher e deixar ficar!", fg="red", font=("Helvetica", 15, "bold"))
+    warning_text_2 = tk.Label(skidpad_points_window, text="O rank é calculado automaticamente com base no tempo do melhor run!", fg="red", font=("Helvetica", 15, "bold"))
     warning_text_2.grid(row=1 , column=0, columnspan=2, padx=10, pady=5)
 
     
@@ -244,6 +271,7 @@ def create_skidpad_points_window():
     dropdown["values"] = (
         "Average time is given",
         "All times are given",
+        "Rank and total teams",
     )
     dropdown.set("Select Calculation")
     dropdown.bind("<<ComboboxSelected>>", update_fields)
@@ -266,7 +294,7 @@ def create_skidpad_points_window():
 
 
     # input fields (initially hidden)
-    global entry_left_1, entry_right_1, entry_left_2, entry_right_2, entry_cones_1, entry_cones_2, entry_average, entry_rank
+    global entry_left_1, entry_right_1, entry_left_2, entry_right_2, entry_cones_1, entry_cones_2, entry_average, entry_rank, entry_total_teams
     entry_left_1 = tk.Entry(frame_inputs)
     entry_right_1 = tk.Entry(frame_inputs)
     entry_left_2 = tk.Entry(frame_inputs)
@@ -275,6 +303,7 @@ def create_skidpad_points_window():
     entry_cones_2 = tk.Entry(frame_inputs)
     entry_average = tk.Entry(frame_inputs)
     entry_rank = tk.Entry(frame_inputs)
+    entry_total_teams = tk.Entry(frame_inputs)
 
     global total_values_inserted
     total_values_inserted = tk.StringVar()
