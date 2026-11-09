@@ -10,6 +10,7 @@ def calculate_efficiency_score():
         EFmin = float(entry_EFmin.get()) if entry_EFmin.get() else None
         if Pmax is not None and EFteam is not None and EFmin is not None:
             EFmax = EFmin * 2
+            EFteam = min(EFteam, EFmax)  # D 9.4.1 (new in 2027): EFteam above EFmax is set to EFmax
             
             efficiency_score = Pmax * ((EFmax- EFteam)/(EFmax - EFmin))**2
             

@@ -5,117 +5,76 @@ from tabs.points_tab import default_scoring_formula
 import math
 
 
-SKIDPAD_DC_PMAX = 75  # maximum points for DC Skidpad (FSG 2026 Table 3)
-SKIDPAD_DV_PMAX = 75  # Maximu points for Driverless Skidpad (FSG 2026 Table 3)
+SKIDPAD_DC_PMAX = 75  # maximum points for DC Skidpad (FS Rules 2027 Table 1)
+SKIDPAD_DV_PMAX = 75  # Maximu points for Driverless Skidpad (FS Rules 2027 Table 1)
+
+SKIDPAD_DQ_TIME = 25  # D 9.2.1: autonomous runs > 25 s without penalties are disqualified
+
+
+def best_valid_time(runs):
+    # runs = [(run time without penalties, cones), ...] -> best time incl. 0.2 s per DOO (D 10.1.7), None if all DQ
+    valid = [raw + 0.2 * cones for raw, cones in runs if raw <= SKIDPAD_DQ_TIME]
+    return min(valid) if valid else None
+
 
 def calculate():
     if selected_calculation.get() != "Rank and total teams":
         if cones_run1 == []:
             messagebox.showerror("Error", "Please insert at least one time, this isn't Mario Kart")
             return
-    
-    if selected_calculation.get() == "Average time is given":
-        final_times_all_teams = []
-        team_final_time = avg_times[0] + 0.2 * cones_run1[0]
-        # 25s DISQUALIFICATION RULE (FSG_2026): based on raw time without penalties
-        if avg_times[0] > 25:
-            messagebox.showerror("DISQUALIFIED", "DISQUALIFIED: Run time without penalties > 25s - please be faster next time!")
-            clear_fields()
-            return
-        for i in range(len(avg_times)):
-            final_times_all_teams.append(avg_times[i] + 0.2*cones_run1[i])
-        sorted_final_times = sorted(final_times_all_teams)
 
-        # Calculate team rank based on best run time
-        team_rank = sorted_final_times.index(team_final_time) + 1
-
-        dv_skidpad_score = SKIDPAD_DV_PMAX * ((len(final_times_all_teams) + 1 - team_rank) / len(final_times_all_teams))
-
-        # --- DC SKIDPAD SCORING (FSG rulebook 2026) ---
-        # Generic dynamic formula:
-        # Score = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
-        Pmax = SKIDPAD_DC_PMAX
-        Tmin = sorted_final_times[0]       # Best valid time across all teams
-
-        dc_skidpad_score = default_scoring_formula(
-            tMin= Tmin,
-            tMinFactor= 1.7,
-            pMinFactor= 0.05,
-            pMax= Pmax,
-            tTeam= team_final_time
-        )
-        
-    elif selected_calculation.get() == "All times are given":
-        first_runs_avg = []
-        second_runs_avg = []
-        final_times_all_teams = []
-
-        for i in range(len(left_run1)):
-            first_runs_avg.append( ((left_run1[i]+right_run1[i])/2)+0.2*cones_run1[i] )
-            second_runs_avg.append( ((left_run2[i]+right_run2[i])/2)+0.2*cones_run2[i] )
-
-            if first_runs_avg[i] < second_runs_avg[i]:
-                final_times_all_teams.append(first_runs_avg[i])
-            else:
-                final_times_all_teams.append(second_runs_avg[i])
-
-        team_final_time = final_times_all_teams[0]
-        # 25s DISQUALIFICATION RULE (FSG_2026): based on raw time without penalties
-        raw_first_run = (left_run1[0] + right_run1[0]) / 2
-        raw_second_run = (left_run2[0] + right_run2[0]) / 2
-        best_raw_run = raw_first_run if raw_first_run < raw_second_run else raw_second_run
-
-        if best_raw_run > 25:
-            messagebox.showerror("DISQUALIFIED", "DISQUALIFIED: Run time without penalties > 25s -> try the pedal is on the right")
-            clear_fields()
-            return
-        sorted_final_times = sorted(final_times_all_teams)
-
-        # Calculate team rank based on best run time
-        team_rank = sorted_final_times.index(team_final_time) + 1
-        
-        dv_skidpad_score = SKIDPAD_DV_PMAX * ((len(final_times_all_teams) + 1 - team_rank) / len(final_times_all_teams))
-        # --- DC SKIDPAD SCORING (FSG rulebook 2026) ---
-        # Generic dynamic scoring formula:
-        # Score = (Pmax - Pmin) * ((Tmax - Tteam)/(Tmax - Tmin))^2 + Pmin
-        Pmax = SKIDPAD_DC_PMAX
-        Tmin = sorted_final_times[0]       # Best valid time across all teams
-
-
-        dc_skidpad_score = default_scoring_formula(
-            tMin= Tmin,
-            tMaxFactor= 1.7,
-            pMinFactor= 0.05,
-            pMax= Pmax,
-            tTeam= team_final_time
-        )
-    
-    elif selected_calculation.get() == "Rank and total teams":
+    if selected_calculation.get() == "Rank and total teams":
         try:
             team_rank = int(entry_rank.get())
             total_teams = int(entry_total_teams.get())
         except:
             messagebox.showerror("Error", "Please insert valid rank and total teams.")
             return
-        
+
         if team_rank < 1 or team_rank > total_teams:
             messagebox.showerror("Error", "Team rank must be between 1 and total teams.")
             return
-        
-        # Driverless Skidpad Score
+
+        # Driverless Skidpad Score (D 9.2.2)
         dv_skidpad_score = SKIDPAD_DV_PMAX * ((total_teams + 1 - team_rank) / total_teams)
-        
-        # For DC Skidpad, we use a simplified formula without actual times
-        # Score based on rank only: best rank gets highest score
-        Pmax = SKIDPAD_DC_PMAX
-        Pmin = Pmax * 0.05  # pMinFactor = 0.05
-        
-        # Simplified scoring: linear interpolation based on rank
-        dc_skidpad_score = Pmax - ((team_rank - 1) / (total_teams - 1)) * (Pmax - Pmin) if total_teams > 1 else Pmax
-    
+        # DC Skidpad is scored with times (D 9.3.1 -> D 9.1.1), the rank alone is not enough
+        dc_skidpad_score = "needs times (D 9.3.1)"
+    else:
+        if selected_calculation.get() == "Average time is given":
+            teams_runs = [[(avg_times[i], cones_run1[i])] for i in range(len(avg_times))]
+        else:  # "All times are given": run time = avg(left, right), penalties added after averaging (D 5.1)
+            teams_runs = [
+                [((left_run1[i] + right_run1[i]) / 2, cones_run1[i]),
+                 ((left_run2[i] + right_run2[i]) / 2, cones_run2[i])]
+                for i in range(len(left_run1))
+            ]
+
+        final_times_all_teams = [best_valid_time(runs) for runs in teams_runs]
+        team_final_time = final_times_all_teams[0]
+        if team_final_time is None:
+            messagebox.showerror("DISQUALIFIED", "DISQUALIFIED: every run > 25s without penalties (D 9.2.1) -> try the pedal is on the right")
+            clear_fields()
+            return
+        sorted_final_times = sorted(t for t in final_times_all_teams if t is not None)
+
+        # Calculate team rank based on best valid run time (D 9.2.2)
+        team_rank = sorted_final_times.index(team_final_time) + 1
+        # shortcut: Nall = every team entered (assumes each has a valid manual or autonomous run), use "Rank and total teams" if not
+        n_all = len(final_times_all_teams)
+        dv_skidpad_score = SKIDPAD_DV_PMAX * ((n_all + 1 - team_rank) / n_all)
+
+        # --- DC SKIDPAD SCORING (D 9.3.1 -> D 9.1.1, Table 9: Tmax = 1.7 Tmin, Pmin = 0.05 Pmax) ---
+        dc_skidpad_score = default_scoring_formula(
+            tMaxFactor= 1.7,
+            tMin= sorted_final_times[0],  # Best valid time across all teams
+            pMinFactor= 0.05,
+            pMax= SKIDPAD_DC_PMAX,
+            tTeam= team_final_time
+        )
+
     messagebox.showinfo("Results", f"Driverless points: {dv_skidpad_score}\nDriverless Cup points: {dc_skidpad_score}")
     clear_fields()
-        
+
 
 def clear_fields():
     entry_left_1.delete(0, tk.END)

@@ -16,7 +16,7 @@ def calculate_manual_acceleration_score():
         # 2) Aplicar penalizações DOO (2 s por cone)
         Tteam_with_penalties = Tteam_raw + 2 * doo
 
-        # Formula oficial de 2026:
+        # Formula oficial de 2027 (D 9.1.1, Table 9):
         # SCORE = (Pmax - Pmin) * ((Tmax - Tteam) / (Tmax - Tmin))^2 + Pmin
         manual_acceleration_score = default_scoring_formula(
             tMin=Tmin,
@@ -42,13 +42,13 @@ def create_manual_acceleration_tab():
     global entry_Pmax, entry_Tteam, entry_Tmax, label_result_manual_acceleration, entry_doo, doo
 
     frame_manual_acceleration = tk.Toplevel()
-    frame_manual_acceleration.title("Manual acceleration Points --> Pag 123")
+    frame_manual_acceleration.title("Manual acceleration Points --> D 9.1, Pag 112")
 
     tk.Label(frame_manual_acceleration, text="Pmax").grid(row=0, column=0, padx=10, pady=5)
     entry_Pmax = tk.Entry(frame_manual_acceleration)
     entry_Pmax.grid(row=0, column=1, padx=10, pady=5)
     entry_Pmax.insert(0, "50")
-    tk.Label(frame_manual_acceleration, text="Maximum points for acceleration manual (Pmax = 50, FSG 2026)").grid(row=0, column=2, padx=10, pady=5)
+    tk.Label(frame_manual_acceleration, text="Maximum points for acceleration manual (Pmax = 50, FS Rules 2027 Table 1)").grid(row=0, column=2, padx=10, pady=5)
 
     tk.Label(frame_manual_acceleration, text="Tteam [s]").grid(row=1, column=0, padx=10, pady=5)
     entry_Tteam = tk.Entry(frame_manual_acceleration)
@@ -58,12 +58,12 @@ def create_manual_acceleration_tab():
     tk.Label(frame_manual_acceleration, text="DOO").grid(row=2, column=0, padx=10, pady=5)
     entry_doo = tk.Entry(frame_manual_acceleration)
     entry_doo.grid(row=2, column=1, padx=10, pady=5)
-    tk.Label(frame_manual_acceleration, text="Cones Dow Or Out --> Pag 132").grid(row=2, column=2, padx=10, pady=5)
+    tk.Label(frame_manual_acceleration, text="Cones Down Or Out, 2 s each --> D 10.1.7, Pag 114").grid(row=2, column=2, padx=10, pady=5)
 
     tk.Label(frame_manual_acceleration, text="Tmin [s]").grid(row=3, column=0, padx=10, pady=5)
     entry_Tmax = tk.Entry(frame_manual_acceleration) 
     entry_Tmax.grid(row=3, column=1, padx=10, pady=5)
-    tk.Label(frame_manual_acceleration, text="Tmin = best event time including penalties (Tmax = 1.35 × Tmin)").grid(row=3, column=2, padx=10, pady=5)
+    tk.Label(frame_manual_acceleration, text="Tmin = best event time including penalties (Tmax = 1.7 × Tmin)").grid(row=3, column=2, padx=10, pady=5)
 
 
     btn_calculate_manual_acceleration_score = tk.Button(frame_manual_acceleration, text="Calcular", command=calculate_manual_acceleration_score)

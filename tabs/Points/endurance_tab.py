@@ -7,15 +7,15 @@ def calculate_endurance_score():
         Pmax = float(entry_Pmax.get()) if entry_Pmax.get() else None
         Tteam = float(entry_Tteam.get()) if entry_Tteam.get() else None
         
-        # De acordo com a Tabela 11 das regras 2026, Tmax = 1.5 * Tmin
+        # De acordo com a Tabela 9 das regras 2027, Tmax = 1.5 * Tmin
         # Tmin deve ter o valor de entry_Tmax pois este é o tempo do veículo mais rápido
         Tmin = float(entry_Tmin.get()) if entry_Tmin.get() else None
         
         if Pmax is not None and Tteam is not None and Tmin is not None:
-            # 1. Calcular o Tmax real baseado na Tabela 11
+            # 1. Calcular o Tmax real baseado na Tabela 9
             Tmax = Tmin * 1.5 
             
-            # 2. Calcular o Pmin (0.1 * Pmax segundo a Tabela 11)
+            # 2. Calcular o Pmin (0.1 * Pmax segundo a Tabela 9)
             Pmin = 0.1 * Pmax
 
             #3. Verificar se os tempos inseridos são válidos

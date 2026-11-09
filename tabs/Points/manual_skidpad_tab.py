@@ -16,7 +16,7 @@ def calculate_manual_skidpad_score():
         # 2) Aplicar penalizações DOO (0.2 s por cone)
         Tteam_with_penalties = Tteam_raw + 0.2 * doo
 
-        # Fórmula oficial de 2026:
+        # Fórmula oficial de 2027 (D 9.1.1, Table 9):
         # SCORE = (Pmax - Pmin) * ((Tmax - Tteam) / (Tmax - Tmin))^2 + Pmin
         manual_skidpad_score = default_scoring_formula(
             tMaxFactor=1.35,
@@ -42,13 +42,13 @@ def create_manual_skidpad_tab():
     global entry_Pmax, entry_Tteam, entry_Tmax, label_result_manual_skidpad, entry_doo, doo
 
     frame_manual_skidpad = tk.Toplevel()
-    frame_manual_skidpad.title("Manual Skidpad Points --> Pag 123")
+    frame_manual_skidpad.title("Manual Skidpad Points --> D 9.1, Pag 112")
 
     tk.Label(frame_manual_skidpad, text="Pmax").grid(row=0, column=0, padx=10, pady=5)
     entry_Pmax = tk.Entry(frame_manual_skidpad)
     entry_Pmax.grid(row=0, column=1, padx=10, pady=5)
     entry_Pmax.insert(0, "50")
-    tk.Label(frame_manual_skidpad, text="Maximum points for Skidpad manual (Pmax = 50, FSG 2026)").grid(row=0, column=2, padx=10, pady=5)
+    tk.Label(frame_manual_skidpad, text="Maximum points for Skidpad manual (Pmax = 50, FS Rules 2027 Table 1)").grid(row=0, column=2, padx=10, pady=5)
 
     tk.Label(frame_manual_skidpad, text="Tteam [s]").grid(row=1, column=0, padx=10, pady=5)
     entry_Tteam = tk.Entry(frame_manual_skidpad)
@@ -58,7 +58,7 @@ def create_manual_skidpad_tab():
     tk.Label(frame_manual_skidpad, text="DOO").grid(row=2, column=0, padx=10, pady=5)
     entry_doo = tk.Entry(frame_manual_skidpad)
     entry_doo.grid(row=2, column=1, padx=10, pady=5)
-    tk.Label(frame_manual_skidpad, text="Cones Down Or Out --> Pag 132").grid(row=2, column=2, padx=10, pady=5)
+    tk.Label(frame_manual_skidpad, text="Cones Down Or Out, 0.2 s each --> D 10.1.7, Pag 114").grid(row=2, column=2, padx=10, pady=5)
 
     tk.Label(frame_manual_skidpad, text="Tmin [s]").grid(row=3, column=0, padx=10, pady=5)
     entry_Tmax = tk.Entry(frame_manual_skidpad) 

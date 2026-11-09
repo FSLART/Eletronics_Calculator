@@ -26,10 +26,9 @@ def calculate():
         lenght = float(entry_lenght.get())
         Tmax = lenght / 6
         Tmin = float(entry_Tmin.get())
+        # D 9.3.2: each run that is DNF/DQ (-1) or above Tmax is set to Tmax before averaging
+        Tteam1, Tteam2 = [Tmax if t < 0 or t > Tmax else t for t in (Tteam1, Tteam2)]
         Ttotal = min(Tteam1, ((Tteam1 + Tteam2)/2))
-
-        if Ttotal > Tmax or Ttotal == -1:
-            Ttotal = Tmax
 
         result = 0.9 * Pmax * ((Tmax - Ttotal)/(Tmax - Tmin)) + 0.1 * Pmax
 
@@ -64,11 +63,11 @@ def update_fields(event):
 
     elif calculation == "DC":
         clear_fields()
-        tk.Label(frame_inputs, text="1st run with penalties:").grid(
+        tk.Label(frame_inputs, text="1st run with penalties (-1 if DNF/DQ):").grid(
             row=2, column=0, padx=10, pady=5
         )
         entry_Tteam1.grid(row=2, column=1, padx=10, pady=5)
-        tk.Label(frame_inputs, text="2nd run with penalties:").grid(
+        tk.Label(frame_inputs, text="2nd run with penalties (-1 if DNF/DQ):").grid(
             row=3, column=0, padx=10, pady=5
         )
         entry_Tteam2.grid(row=3, column=1, padx=10, pady=5)

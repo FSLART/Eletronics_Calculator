@@ -10,16 +10,17 @@ from tabs.Points.manual_acceleration import create_manual_acceleration_tab
 
 def default_scoring_formula(tMaxFactor, tMin, pMinFactor,pMax, tTeam):
     '''
-    Pmax is the maximum points for the discipline according to table 3
-    Pmin is the minimum points for the discipline according to table 11
+    Pmax is the maximum points for the discipline according to Table 1 (FS Rules 2027)
+    Pmin is the minimum points for the discipline according to Table 9
     Tteam is the team's best time including penalties. Tteam is capped to Tmax .
-    Tmax is defined in table 11.
+    Tmax is defined in Table 9.
     Tmin is the time of the fastest vehicle including penalties.
     '''
     pMin= pMinFactor*pMax
     tMax = tMaxFactor*tMin
 
-    return (pMax-pMin)*((tMax-min(tTeam,tMax))/(tMax - tMin))**2 + pMin
+    score = (pMax-pMin)*((tMax-min(tTeam,tMax))/(tMax - tMin))**2 + pMin
+    return min(score, pMax)  # A 1.2.8: points are bounded by 0 <= P <= Pmax
 
 def create_points_tab(notebook):
     frame_points = ttk.Frame(notebook)

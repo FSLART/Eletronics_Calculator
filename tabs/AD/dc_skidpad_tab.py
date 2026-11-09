@@ -21,14 +21,14 @@ def calculate_dc_skidpad_score():
             # DOO penalties: 0.2 s per cone (D10.1.7)
             Tteam_with_penalties = raw_Tteam + 0.2 * doo
 
-            # DC-only Skidpad parameters (Table 11)
+            # DC-only Skidpad parameters (Table 9)
             Tmax = 1.7 * Tmin
 
             # Cap team time at Tmax as per D9.1.1
             Tteam_effective = min(Tteam_with_penalties, Tmax)
 
             dc_skidpad_score = default_scoring_formula(
-                tMinFactor=1.7,
+                tMaxFactor=1.7,
                 tMin=Tmin,
                 pMinFactor=0.05,
                 pMax=Pmax,
@@ -51,13 +51,13 @@ def create_dc_skidpad_tab():
     global entry_Pmax, entry_Tteam, entry_Tmax, label_result_dc_skidpad, entry_doo, doo
 
     frame_dc_skidpad = tk.Toplevel()
-    frame_dc_skidpad.title("DC Skidpad Scoring (FSG 2026 - page 132)")
+    frame_dc_skidpad.title("DC Skidpad Scoring (FS Rules 2027 - D 9.3.1, page 112)")
 
     tk.Label(frame_dc_skidpad, text="Pmax").grid(row=0, column=0, padx=10, pady=5)
     entry_Pmax = tk.Entry(frame_dc_skidpad)
     entry_Pmax.grid(row=0, column=1, padx=10, pady=5)
     entry_Pmax.insert(0, "75")
-    tk.Label(frame_dc_skidpad, text="Maximum points for the discipline - page 10").grid(row=0, column=2, padx=10, pady=5)
+    tk.Label(frame_dc_skidpad, text="Maximum points for the discipline - Table 1, page 7").grid(row=0, column=2, padx=10, pady=5)
 
     tk.Label(frame_dc_skidpad, text="Tteam [s]").grid(row=1, column=0, padx=10, pady=5)
     entry_Tteam = tk.Entry(frame_dc_skidpad)
@@ -67,14 +67,14 @@ def create_dc_skidpad_tab():
     tk.Label(frame_dc_skidpad, text="DOO").grid(row=2, column=0, padx=10, pady=5)
     entry_doo = tk.Entry(frame_dc_skidpad)
     entry_doo.grid(row=2, column=1, padx=10, pady=5)
-    tk.Label(frame_dc_skidpad, text="Down Or Out cones (DOO) – page 134 - D10.1.7").grid(row=2, column=2, padx=10, pady=5)
+    tk.Label(frame_dc_skidpad, text="Down Or Out cones (DOO) – page 114 - D 10.1.7").grid(row=2, column=2, padx=10, pady=5)
 
     tk.Label(frame_dc_skidpad, text="Tmin [s]").grid(row=3, column=0, padx=10, pady=5)
     entry_Tmax = tk.Entry(frame_dc_skidpad) 
     entry_Tmax.grid(row=3, column=1, padx=10, pady=5)
-    tk.Label(frame_dc_skidpad, text="Tmin = best event time - Table 11").grid(row=3, column=2, padx=10, pady=5)
+    tk.Label(frame_dc_skidpad, text="Tmin = best event time - Table 9").grid(row=3, column=2, padx=10, pady=5)
 
-    tk.Label(frame_dc_skidpad, text="Runs with time without penalties > 25 s are DISQUALIFIED - page 132 (D9.2.1)").grid(row=4, column=2, padx=10, pady=5)
+    tk.Label(frame_dc_skidpad, text="Runs with time without penalties > 25 s are DISQUALIFIED - page 112 (D 9.2.1)").grid(row=4, column=2, padx=10, pady=5)
     
     
 
