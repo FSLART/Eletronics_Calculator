@@ -17,6 +17,7 @@ from tabs.Eletro.resistivity_conductivity_tab import (
 )
 from tabs.Eletro.parallels_tab import create_parallels_window
 from tabs.Eletro.filters import create_filter_window
+from tabs.Eletro.ev_rules_tab import create_ev_rules_window
 
 
 def create_eletronics_tab(notebook):
@@ -112,4 +113,10 @@ def create_eletronics_tab(notebook):
         **button_options,
         command=create_parallels_window,
     ).grid(row=4, column=2, sticky="nsew", padx=5, pady=5)
+    tk.Button(
+        frame_eletronics,
+        text="EV Rules Check (2027)",
+        **button_options,
+        command=create_ev_rules_window,
+    ).grid(row=5, column=1, sticky="nsew", padx=5, pady=5)
     

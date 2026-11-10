@@ -7,6 +7,7 @@ from tabs.Points.efficiency_factor_tab import create_efficiency_factor_tab
 from tabs.Points.autocross_tab import create_autocross_tab
 from tabs.Points.manual_skidpad_tab import create_manual_skidpad_tab
 from tabs.Points.manual_acceleration import create_manual_acceleration_tab
+from tabs.Points.bpp_tab import create_bpp_tab
 
 def default_scoring_formula(tMaxFactor, tMin, pMinFactor,pMax, tTeam):
     '''
@@ -84,6 +85,13 @@ def create_points_tab(notebook):
         frame_points,
         text="Manual Acceleration \n Points Calculator",
         **button_options,
-        command= create_manual_acceleration_tab 
+        command= create_manual_acceleration_tab
     ).grid(row=3, column=2, sticky="nsew", padx=5, pady=5)
+
+    tk.Button(
+        frame_points,
+        text="BPP Points Calculator",
+        **button_options,
+        command= create_bpp_tab
+    ).grid(row=4, column=1, sticky="nsew", padx=5, pady=5)
     
